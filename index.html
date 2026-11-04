@@ -7,6 +7,107 @@
 <meta name="description" content="CarbonLens v9：整合總攬登入、企業前台、手機現場 AOI、管理後台與口試雙面板的 ISO 14064-1:2018 溫室氣體盤查研究原型（單檔、免安裝、三端即時同步）。">
 <title>CarbonLens v9 整合平台</title>
 <style>
+/* =========================================================================
+   淺色主題高對比修復：文字隨背景淡化而加深（強化可讀性）
+   ========================================================================= */
+/* =========================================================================
+   雷達圖兩條線高對比區隔：冷調深藍虛線 (預算) vs 暖調橘實線 (實際)
+   ========================================================================= */
+
+/* 1. 數列 A：預算分配（目標配額）改為深邃科技藍 + 虛線 */
+#clDynamicRadarMount polygon:first-of-type {
+  stroke: #2563eb !important;
+  fill: rgba(37, 99, 235, 0.16) !important;
+  stroke-width: 2.4px !important;
+  stroke-dasharray: 6 3 !important; /* 虛線強化預算/目標感 */
+}
+#clDynamicRadarMount rect.cl-radar-vertex {
+  fill: #2563eb !important;
+  stroke: #1e3a8a !important;
+  stroke-width: 1.5px !important;
+}
+
+/* 2. 數列 B：實際開銷（實測績效）改為高對比暖陽橘 + 實線 */
+#clDynamicRadarMount polygon:last-of-type {
+  stroke: #ea580c !important;
+  fill: rgba(234, 88, 12, 0.20) !important;
+  stroke-width: 2.6px !important;
+}
+#clDynamicRadarMount circle.cl-radar-vertex {
+  stroke: #ea580c !important;
+  fill: #ffffff !important; /* 白心橘框，對比極鮮明 */
+  stroke-width: 2.5px !important;
+}
+
+/* 3. 頂部圖例（Legend）文字與色塊同步更新 */
+#clDynamicRadarMount span[style*="color:#7dd3fc"] {
+  color: #2563eb !important;
+  font-weight: 800 !important;
+}
+#clDynamicRadarMount span[style*="color:#7dd3fc"] span {
+  background: #2563eb !important;
+}
+
+#clDynamicRadarMount span[style*="color:#86efac"] {
+  color: #ea580c !important;
+  font-weight: 800 !important;
+}
+#clDynamicRadarMount span[style*="color:#86efac"] span {
+  background: #ea580c !important;
+}
+
+/* 4. 懸浮提示框 (Tooltip) 高對比與文字加深 */
+#clRadarTooltipGroup rect {
+  fill: rgba(15, 23, 42, 0.94) !important;
+  stroke: #38bdf8 !important;
+}
+#clRadarTipTitle {
+  fill: #ffffff !important;
+  font-weight: 900 !important;
+}
+#clRadarTipVal {
+  fill: #fde047 !important; /* 提示數值改用明亮琥珀黃，在深黑底上極清晰 */
+  font-weight: 800 !important;
+}
+/* 1. 左下方：橫向雙軌範疇結構圖文字加深 */
+#clHorizontalDualScopeMount strong { color: #0f2942 !important; }
+#clHorizontalDualScopeMount div[style*="color:#9ab8c9"],
+#clHorizontalDualScopeMount small[style*="color:#9ab8c9"] { color: #475569 !important; font-weight: 600 !important; }
+#clHorizontalDualScopeMount div[style*="color:#fff"] { color: #0f172a !important; }
+#clHorizontalDualScopeMount div[style*="color:#b5d1e2"] { color: #334155 !important; font-weight: 600 !important; }
+
+/* 雙軌三大卡片主題色加深 */
+#clHorizontalDualScopeMount div[style*="color:#7ef4ff"] { color: #0284c7 !important; }
+#clHorizontalDualScopeMount div[style*="color:#fde68a"] { color: #b45309 !important; }
+#clHorizontalDualScopeMount div[style*="color:#ddd6fe"] { color: #6d28d9 !important; }
+#clHorizontalDualScopeMount b[style*="color:#6ee7b7"] { color: #047857 !important; }
+#clHorizontalDualScopeMount b[style*="color:#fde68a"] { color: #b45309 !important; }
+#clHorizontalDualScopeMount b[style*="color:#ddd6fe"] { color: #6d28d9 !important; }
+
+/* 雙軌卡片邊框與背景微調（避免死白） */
+#clHorizontalDualScopeMount div[style*="background:rgba(0,210,255"] { background: #f0f9ff !important; border-color: #bae6fd !important; }
+#clHorizontalDualScopeMount div[style*="background:rgba(245,184,46"] { background: #fffbeb !important; border-color: #fde68a !important; }
+#clHorizontalDualScopeMount div[style*="background:rgba(167,139,250"] { background: #faf5ff !important; border-color: #e9d5ff !important; }
+
+/* 2. 右側：動態多維度雷達圖文字與網格加深 */
+#clDynamicRadarMount text[fill="#eef7fa"] { fill: #0f172a !important; font-weight: 800 !important; font-size: 11.5px !important; }
+#clDynamicRadarMount text[fill="#9ab8c9"] { fill: #475569 !important; font-weight: 700 !important; }
+#clDynamicRadarMount line { stroke: rgba(100, 116, 139, 0.45) !important; stroke-width: 1.2 !important; }
+#clDynamicRadarMount polygon[fill="none"] { stroke: rgba(100, 116, 139, 0.35) !important; stroke-width: 1.2 !important; }
+
+/* 雷達圖頂部圖例文字加深 */
+#clDynamicRadarMount span[style*="color:#7dd3fc"] { color: #0284c7 !important; font-weight: 800 !important; }
+#clDynamicRadarMount span[style*="color:#86efac"] { color: #15803d !important; font-weight: 800 !important; }
+
+/* 雷達圖底部三小格 KPI 邊框與文字加深 */
+#clDynamicRadarMount div[style*="background:rgba(255,255,255,0.03)"] { 
+  background: #f8fafc !important; 
+  border: 1px solid #cbd5e1 !important; 
+}
+#clDynamicRadarMount span[style*="color:#9ab8c9"] { color: #475569 !important; font-weight: 700 !important; }
+#clDynamicRadarMount strong[style*="color:#6ee7b7"] { color: #15803d !important; }
+#clDynamicRadarMount strong[style*="color:#7ef4ff"] { color: #0284c7 !important; }
+#clDynamicRadarMount strong[style*="color:#fde68a"] { color: #b45309 !important; }
 /* =====================================================================
    CarbonLens v9｜設計代號 Token（深色為預設，淺色由 data-theme 切換）
    ===================================================================== */
@@ -661,16 +762,16 @@ textarea.field { min-height: 70px; resize: vertical; line-height: 1.55; }
     <div class="landing-inner">
       <div class="hero">
         <span class="eyebrow">ISO 14064-1:2018 組織型溫室氣體盤查研究平台</span>
-        <h1>企業綠色數位轉型核心系統：<br><span>AI + AOI 邊緣取像 × 稽核軌跡治理</span></h1>
-        <p class="lead">以單一多模態資料來源（SSOT）串接手機現場取像、Excel／CSV 批次與系統介接；每筆證據計算 SHA-256，經人機迴圈（HITL）複核、RAG 規則引用與 Audit-as-code 雜湊鏈留痕，讓盤查結果可追溯、可查證。</p>
+        <h1>企業綠色數位轉型碳盤查系統：<br><span>AI 協助辨識 × 每筆數據可追溯</span></h1>
+        <p class="lead">手機拍照、Excel 匯入與系統資料集中管理；每份單據自動產生數位指紋，經人員複核後留下完整紀錄，讓盤查結果查得到來源、經得起查證。</p>
         <div class="feature-grid">
-          <div class="feature"><i>▣</i><b>邊緣取像防呆</b><span>Web Crypto SHA-256 原圖雜湊，HITL 人工確認讀值</span></div>
-          <div class="feature"><i>⛔</i><b>Gate 2 原子性零寫入</b><span>負值、未知單位、跨期錯誤 → HTTP 422 整批回滾</span></div>
-          <div class="feature"><i>⇄</i><b>SSOT 跨模態衝突</b><span>Excel 申報與電費單證據不一致時自動攔截</span></div>
-          <div class="feature"><i>⛓</i><b>Audit-as-code 雜湊鏈</b><span>每個動作串接前一筆雜湊，竄改即可偵測</span></div>
+          <div class="feature"><i>▣</i><b>拍照品質檢查</b><span>照片模糊、反光或缺角時提醒重拍，讀值由人員確認</span></div>
+          <div class="feature"><i>⛔</i><b>資料正確性保護</b><span>數值異常、單位不明或期間錯置時整批退回，並自動換算單位</span></div>
+          <div class="feature"><i>⇄</i><b>跨來源比對</b><span>申報數值與電費單不一致時自動提醒</span></div>
+          <div class="feature"><i>⛓</i><b>操作紀錄鏈</b><span>每一步操作都留下紀錄，事後可完整查詢</span></div>
         </div>
         <div class="flow-strip" aria-label="盤查流程">
-          <div>上傳<small>影像／單據</small></div><div>擷取<small>AOI／OCR</small></div><div>規則<small>RAG 引用</small></div><div>計算<small>係數版本</small></div><div>複核<small>HITL＋SoD</small></div><div>輸出<small>報表／查證</small></div>
+          <div>上傳<small>單據照片</small></div><div>讀取<small>數值辨識</small></div><div>規則<small>盤查規範</small></div><div>計算<small>排放係數</small></div><div>複核<small>人員確認</small></div><div>輸出<small>報表</small></div>
         </div>
         <div class="live-strip" id="landingLive"></div>
         
@@ -6124,7 +6225,7 @@ function seuSectionHtml(st) {
               <th>設備編號／佔比</th>
               <th>重大能耗設備（SEU）與 3 年輪替診斷</th>
               <th>近 3 年耗電趨勢與衰減</th>
-              <th>ISO 14064-2 減量專案措施</th>
+              <th>預期減量專案措施</th>
               <th>預計年減碳量 (tCO₂e)</th>
               <th>投資額 vs. 年省費用</th>
               <th>投資回收期 (ROI)</th>
@@ -8169,7 +8270,7 @@ init();
   const qrHubState = {
     scenario: 'boss_dashboard',
     recId: 'REC-2026-001',
-    baseUrl: ''
+    baseUrl: 'https://la05230000000-tech.github.io/carbonlens-demo/'
   };
 
   /* --- 1. 純 JS ISO/IEC 18004 標準 QR Code 矩陣編碼器 (Ver 1~10, ECC Level L) --- */
@@ -8834,6 +8935,1903 @@ init();
 
   runQrLinkHubV9063();
   handleIncomingQrUrlParams();
+  /* =========================================================================
+   26m. CL-DEMO-GAP-20261101-R2 單一母檔滾動式結構優化與成果展雙模模組
+   - 嚴守 A1～A10 硬性約束：單一母檔雙模切換（論文純淨版 ⇄ 成果展訂閱演示版）
+   - 落實決策點：1A(SaaS訂閱制演示)、2A(電子簽章+誤差上下限免責)、3A(產業模板預覽)、4B(SWOT四象限切換)、5A(INT-04訪談矩陣)
+   - 零 MutationObserver 設計，100% 確保 Chrome 極速開啟不卡死
+   ========================================================================= */
+(function applyRollingRevisionV90633_R2() {
+  'use strict';
+
+  const EX_KEY = 'carbonlens_v90633_ex_mode';
+  let exMode = sessionStorage.getItem(EX_KEY) === '1'; // 預設 false = 論文純淨版
+  let heatViewMode = 'heat'; // 'heat' | 'swot'
+  let quarterMode = false;   // false = 月視角, true = 季視角(Q1-Q4)
+  let selectedPlan = 'saas_std';
+  let selectedInd = 'steel';
+  let errBoundPct = 5;
+  let eSignChecked = true;
+  let retentionYears = '3';
+
+  // 1. 注入專屬樣式（控制論文純淨版 vs 成果展演示版顯示分流）
+  if (!document.getElementById('clR2Style')) {
+    const st = document.createElement('style');
+    st.id = 'clR2Style';
+    st.textContent = `
+      .r2-ex-only { display: none !important; }
+      body.r2-exhibition-mode .r2-ex-only { display: block !important; }
+      body.r2-exhibition-mode .r2-ex-grid { display: grid !important; }
+      .r2-demo-banner {
+        background: linear-gradient(90deg, #3a2500, #5c3d00 50%, #3a2500);
+        color: #ffe29a; border-bottom: 2px solid var(--amber);
+        padding: 7px 16px; font-size: 12px; display: flex; flex-wrap: wrap;
+        align-items: center; justify-content: space-between; gap: 8px; z-index: 65;
+      }
+      .r2-demo-banner b { background: var(--amber); color: #2b1d00; padding: 2px 8px; border-radius: 4px; margin-right: 6px; }
+      .r2-mode-switch {
+        border: 1.5px solid var(--teal) !important;
+        background: color-mix(in srgb, var(--teal) 18%, var(--surface-2)) !important;
+        color: var(--teal-ink) !important; font-weight: 900 !important;
+      }
+      body.r2-exhibition-mode .r2-mode-switch {
+        border-color: var(--amber) !important;
+        background: color-mix(in srgb, var(--amber) 22%, var(--surface-2)) !important;
+        color: var(--warn-ink) !important;
+      }
+      .r2-swot-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 8px; }
+      .r2-swot-box { padding: 12px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--bg-2); }
+      .r2-swot-box h4 { margin: 0 0 6px; font-size: 13px; display: flex; align-items: center; justify-content: space-between; }
+      .r2-plan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin-top: 10px; }
+      .r2-plan-card { padding: 12px; border-radius: 10px; border: 1.5px solid var(--line-2); background: var(--bg-2); cursor: pointer; transition: .15s; }
+      .r2-plan-card.active { border-color: var(--teal); background: color-mix(in srgb, var(--teal) 12%, var(--bg-2)); box-shadow: 0 0 0 2px color-mix(in srgb, var(--teal) 28%, transparent); }
+      .r2-plan-card h4 { margin: 0 0 4px; font-size: 13.5px; }
+      .r2-price { font-size: 20px; font-weight: 900; color: var(--teal-ink); font-family: var(--mono); margin: 4px 0; }
+      .r2-spec-tbl { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 6px; }
+      .r2-spec-tbl td { padding: 3px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+      .r2-spec-tbl td:first-child { width: 58px; font-weight: 800; color: var(--teal-ink); white-space: nowrap; }
+      .r2-arch-flow { display: grid; grid-template-columns: repeat(4, minmax(140px, 1fr)); gap: 10px; margin-top: 10px; }
+      .r2-arch-node { padding: 10px; border-radius: 8px; border: 1px dashed var(--teal); background: var(--bg-2); font-size: 11.5px; }
+      @media (max-width: 760px) { .r2-swot-grid, .r2-arch-flow { grid-template-columns: 1fr; } }
+    `;
+    document.head.appendChild(st);
+  }
+
+  // 2. 補充 INT-04（11/1 黃健銘老師去識別化訪談紀錄｜決策點 5 選方案 A）
+  function ensureInt04Record() {
+    if (typeof S === 'undefined' || !Array.isArray(S.interviews)) return;
+    if (!S.interviews.some(x => x.code === 'INT-04')) {
+      S.interviews.push({
+        code: 'INT-04',
+        date: '2026-11-01',
+        mode: '線上視訊（錄音／畫面演示）',
+        group: 'G2 科技服務／學界',
+        who: '資訊科技服務公司負責人兼大學教師',
+        version: 'CarbonLens V9.06.3（含基線預測與雙軌結構）',
+        duration: '51:20',
+        asr: '關閉 VAD 完整重轉錄＋人工核對',
+        status: '已完成關鍵時間段核對｜已去識別化',
+        sentDate: '2026-11-01'
+      });
+    }
+  }
+
+  // 3. 頂部「論文純淨版 ⇄ 成果展演示版」切換開關與 A8/A10 誠實揭露橫幅
+  function setupTopModeSwitch() {
+    document.body.classList.toggle('r2-exhibition-mode', exMode);
+
+    let banner = document.getElementById('r2ExhibitionBanner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.id = 'r2ExhibitionBanner';
+      banner.className = 'r2-demo-banner r2-ex-only';
+      banner.innerHTML = `
+        <div>
+          <b>🚀 成果展演示模式（DEMO）</b>
+          <span>本模式展示 <strong>SaaS 雲端訂閱制模擬、特定產業模板預覽、免登入快速試算與 API 三態規格</strong>｜所有廠區數據、試算與 API 均為<strong>「模擬」</strong>（<code>/api/rag</code>、<code>/api/aoi</code> 為 <strong>404 未實作</strong>）｜依 A10 規範：成果展門面層不作為論文研究證據。</span>
+        </div>
+        <div class="head-tools">
+          <button class="btn sm" type="button" data-r2-act="open-saas-modal">💳 訂閱制與帳號控管演示</button>
+          <button class="btn sm warn" type="button" data-r2-act="toggle-ex-mode">切回論文純淨版（截圖用）</button>
+        </div>
+      `;
+      const topbar = document.querySelector('.topbar');
+      if (topbar && topbar.parentNode) topbar.parentNode.insertBefore(banner, topbar);
+    }
+
+    const tools = document.querySelector('.topbar .top-tools');
+    if (tools && !document.getElementById('r2ModeBtn')) {
+      const btn = document.createElement('button');
+      btn.id = 'r2ModeBtn';
+      btn.type = 'button';
+      btn.className = 'pill r2-mode-switch';
+      btn.dataset.r2Act = 'toggle-ex-mode';
+      btn.title = '切換「論文純淨版（隱藏商用門面）」與「成果展演示版（展開 SaaS 訂閱制、免登入試算與工程規格）」';
+      tools.prepend(btn);
+    }
+    const btn = document.getElementById('r2ModeBtn');
+    if (btn) {
+      btn.innerHTML = exMode
+        ? '🚀 模式：<b>成果展訂閱演示版</b>（點此切回論文版）'
+        : '🎓 模式：<b>論文純淨版</b>（點此展開成果展演示）';
+    }
+  }
+
+  // 4. 門面層（G-01 首頁、G-02 免登入模擬試算、G-03 訂閱制演示【決策1A】、G-10 產業模板與 FAQ【決策3A】、G-11 聯絡）
+  function renderLandingExhibition() {
+    const landing = document.querySelector('section.landing');
+    if (!landing) return;
+    let box = document.getElementById('r2LandingExhibitionBox');
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'r2LandingExhibitionBox';
+      box.className = 'r2-ex-only';
+      box.style.cssText = 'max-width:1240px;margin:0 auto 32px;padding:0 20px;';
+      landing.appendChild(box);
+    }
+
+    const indTemplates = {
+      steel: {
+        name: '🔩 鋼鐵／金屬扣件上下游供應鏈專屬模板（首推鎖定產業）',
+        pain: '受歐盟 CBAM 與台灣碳費雙重約束，廠內高耗能電爐／退火爐、酸洗線與委外貨運單據繁雜。',
+         preset: '預設啟用：台電高壓電費單（範疇 2）、天車與柴油堆高機油單（範疇 1）、盤元／鋼胚過磅單淨重推算、CBAM 產品碳含量延伸欄位[cite: 17, 18]。',
+        estKwh: 85000, estDiesel: 1200
+      },
+      cement: {
+        name: '🏗️ 水泥建材／預拌混凝土上下游供應鏈模板',
+        pain: '大宗散裝原料過磅單印章易模糊、運輸車隊油耗單據分散於各工地與營業所[cite: 14, 17, 18]。',
+        preset: '預設啟用：卡車總重減空車重過磅淨重推算、預拌車柴油單（範疇 1）、廠區總電表與分電表（範疇 2）、委外運輸噸公里（範疇 3）[cite: 18]。',
+        estKwh: 62000, estDiesel: 3400
+      },
+      general: {
+        name: '🏭 中小型精密機械／一般製造業標準模板',
+        pain: '缺乏專職盤查人力（僅 1 名環安或總務兼辦），仰賴 Excel 手工彙整易漏月或打錯位數[cite: 4, 14, 17]。',
+        preset: '預設啟用：12 個月電費／水費帳單核對台帳、空壓機與冰水機重大能耗診斷、冷媒 R-410A 維修工單補充量計算[cite: 17, 18]。',
+        estKwh: 25000, estDiesel: 300
+      }
+    };
+    const curInd = indTemplates[selectedInd] || indTemplates.steel;
+
+    const plans = {
+      saas_std: {
+        title: '☁️ SaaS 雲端標準訂閱制（主力推薦）',
+        price: 'NT$ 10,000 / 月',
+        annual: '年約 NT$ 120,000（含係數庫定期維護更新）',
+        quota: '授權席次：5 組具名帳號（含同時在線 Session 鎖定，防止 1 帳號多人共用）[cite: 14, 17, 21]',
+        storage: '單據倉儲：50 GB 加密雲端空間（查證結案滿 3 年自動封存清理）',
+        vsStaff: '相較聘請 1 名專職碳盤查人員（年薪 50～80 萬），每年直接節省約 NT$ 480,000 人力開銷（省下 80% 成本）！'
+      },
+      saas_pro: {
+        title: '🏢 SaaS 集團多廠區訂閱制',
+        price: 'NT$ 22,000 / 月',
+        annual: '年約 NT$ 264,000（支援跨廠區＋供應鏈單向填報）',
+        quota: '授權席次：15 組具名帳號＋20 家上游供應商單向填報憑證[cite: 17]',
+        storage: '單據倉儲：200 GB 獨立租戶空間（含自動雙重備份與去識別化匯出）[cite: 17, 18]',
+        vsStaff: '相較聘請 2 名跨廠區專職盤查人員（年約 120～160 萬），每年節省逾百萬人事與顧問外包費！'
+      },
+      cloud_vm: {
+        title: '🛡️ 企業獨立雲端專機租用（VIP 隔離）',
+        price: 'NT$ 35,000 / 月',
+        annual: '年約 NT$ 420,000（獨立雲端機器＋程式碼防逆向保護）',
+        quota: '授權席次：30 組具名帳號（獨立防火牆與專屬資料庫實例）[cite: 17, 21]',
+        storage: '單據倉儲：500 GB 專屬儲存區（可自訂 1～7 年自動歸檔銷毀策略）[cite: 17]',
+        vsStaff: '解決中小企業無力自建機房防火牆、又擔心公有雲資料混放之資安顧慮[cite: 17, 21]。'
+      },
+      on_prem: {
+        title: '🖥️ 傳統地端買斷建置（對照基線）',
+        price: 'NT$ 850,000 起（一次性）',
+        annual: '另計每年 15% 維護合約（若不續約即成孤兒系統）[cite: 14, 17, 21]',
+        quota: '需自備機房、硬體伺服器、企業級防火牆與專職 MIS 維運人員[cite: 17]',
+        storage: '由企業自有硬碟承擔（中毒或硬碟損壞風險自負）[cite: 18]',
+        vsStaff: '⚠️ 訪談實證（INT-04）：中小企業聽到數十萬至百萬地端建置費即卻步，且建置完易面臨維護斷炊困境，故本系統主推 SaaS 訂閱制[cite: 14, 17, 21]。'
+      }
+    };
+    const curPlan = plans[selectedPlan] || plans.saas_std;
+
+    box.innerHTML = `
+      <!-- G-01 & G-10 特定產業模板專注策略（決策點 3 選方案 A） -->
+      <article class="card mt" style="border-color:var(--teal)">
+        <div class="card-head">
+          <div>
+            <h3>🏭 G-01 / G-10 特定產業專屬盤查模板選擇器（Focus 策略｜模擬預覽）</h3>
+            <p>回應實務專家建議：「切忌包山包海通用模板，每個產業一個規範」——依企業所屬產業一鍵載入對應單據與範疇配置[cite: 14, 17, 21]</p>
+          </div>
+          <span class="badge warn">模擬預覽｜不影響論文預設廠區</span>
+        </div>
+        <div class="seg" role="group" aria-label="產業模板選擇">
+          <button type="button" data-r2-ind="steel" aria-pressed="${selectedInd === 'steel'}">🔩 鋼鐵／金屬加工供應鏈（首推）</button>
+          <button type="button" data-r2-ind="cement" aria-pressed="${selectedInd === 'cement'}">🏗️ 水泥／預拌建材供應鏈</button>
+          <button type="button" data-r2-ind="general" aria-pressed="${selectedInd === 'general'}">🏭 中小型一般製造業</button>
+        </div>
+        <div class="banner info mt-s">
+          <span>🎯</span>
+          <div>
+            <b>${curInd.name}</b>
+            <div><strong>產業痛點：</strong>${curInd.pain}</div>
+            <div><strong>專屬配置：</strong>${curInd.preset}</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- G-03 SaaS 雲端訂閱制演示與帳號控管工作台（決策點 1 選方案 A：以訂閱制方式演示） -->
+      <article class="card mt" style="border-color:var(--amber)">
+        <div class="card-head">
+          <div>
+            <h3>💳 G-03 SaaS 雲端月租訂閱制 × 替代專職人力成本效益演示（模擬）</h3>
+            <p>回應實務專家（INT-04）核心洞察：中小企業無法負擔百萬地端建置或年薪 50～100 萬專職盤查員，採「每月 NT$ 10,000 雲端訂閱＝線上數位盤查員」最具吸引力[cite: 14, 17, 21]</p>
+          </div>
+          <span class="badge ok">SaaS 訂閱制互動演示（模擬）</span>
+        </div>
+        <div class="r2-plan-grid">
+          ${Object.entries(plans).map(([k, p]) => `
+            <div class="r2-plan-card ${selectedPlan === k ? 'active' : ''}" data-r2-plan="${k}">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <h4>${p.title}</h4>
+                <span class="badge ${k === 'saas_std' ? 'ok' : k === 'on_prem' ? 'risk' : 'info'}">${k === 'saas_std' ? '中小企業首選' : k === 'on_prem' ? '高門檻對照' : '進階方案'}</span>
+              </div>
+              <div class="r2-price">${p.price}</div>
+              <small class="muted" style="display:block;margin-bottom:6px">${p.annual}</small>
+              <div style="font-size:11.5px;line-height:1.55">${p.quota}<br>${p.storage}</div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="banner ok mt-s">
+          <span>💡</span>
+          <div style="width:100%">
+            <b>目前選擇方案：${curPlan.title}（${curPlan.price}）</b>
+            <div>${curPlan.vsStaff}</div>
+            <div class="kv mt-s" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+              <div><span>🔐 訂閱帳號防共用控管（模擬）</span><b>具名設備綁定｜已用 3 / 5 席（異常跨區登入自動鎖定）</b></div>
+              <div><span>🗄️ 單據影像倉儲自動清理（S-12）</span><b>查證結案後保留 3 年自動歸檔清理（目前使用率 14.2%）</b></div>
+              <div><span>🔄 法規與排放係數維護頻率</span><b>每季定期巡檢＋環境部公告即時熱更新（免客戶手動維護）</b></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- G-02 免登入 30 秒快速模擬試算 & G-10 FAQ / G-11 聯絡諮詢 -->
+      <div class="grid g-2 mt">
+        <article class="card">
+          <div class="card-head">
+            <div><h3>🧮 G-02 免登入 30 秒排放量與訂閱省錢試算（模擬）</h3><p>輸入月均用電與用油，即時預估年度排放量與導入 SaaS 訂閱制節省之人力成本</p></div>
+            <span class="badge warn">模擬試算</span>
+          </div>
+          <div class="form-grid">
+            <label class="lbl">月均外購電力（kWh／度）<input class="field" id="r2QuickKwh" type="number" min="0" value="${curInd.estKwh}"></label>
+            <label class="lbl">月均柴油消耗（L／公升）<input class="field" id="r2QuickDiesel" type="number" min="0" value="${curInd.estDiesel}"></label>
+          </div>
+          <div id="r2QuickCalcOut" class="banner info mt-s"></div>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <div><h3>❓ G-10 常見問題 FAQ 與 G-11 導入諮詢（模擬）</h3><p>針對中小企業負責人與內部稽核最關心的三大問題</p></div>
+            <span class="badge info">模擬表單</span>
+          </div>
+          <div style="font-size:12px;line-height:1.65">
+            <div><b>Q1：我們只有 1 個廠區、沒有專職環安人員，適合哪種方式？</b><br><span class="muted">A：建議採 SaaS 雲端標準訂閱（每月 1 萬元），直接以批次 PDF/電費單上傳搭配人工覆核，免自建機房防火牆[cite: 14, 17]。</span></div>
+            <div class="mt-s"><b>Q2：原始單據缺漏或蓋章模糊時，如何避免日後查證爭議？</b><br><span class="muted">A：系統內建上傳人電子簽章與「盤查誤差上下限（±5%）保護聲明」，明確區分實測值與推估值責任邊界[cite: 14, 17]。</span></div>
+          </div>
+          <div class="rag-box mt-s">
+            <input class="field" id="r2ContactMail" placeholder="輸入企業聯繫 Email 索取產業專屬模板試用（模擬，不外發）">
+            <button class="btn primary sm" type="button" data-r2-act="submit-contact">預約體驗（模擬）</button>
+          </div>
+        </article>
+      </div>
+    `;
+    updateQuickCalc();
+  }
+
+  function updateQuickCalc() {
+    const out = document.getElementById('r2QuickCalcOut');
+    if (!out) return;
+    const kwh = Number((document.getElementById('r2QuickKwh') || {}).value || 0);
+    const dsl = Number((document.getElementById('r2QuickDiesel') || {}).value || 0);
+    const s2 = (kwh * 12 * 0.466) / 1000;
+    const s1 = (dsl * 12 * 2.606) / 1000;
+    const tot = s1 + s2;
+    out.innerHTML = `
+      <span>📊</span>
+      <div>
+        <b>年度預估總排放量（模擬）：<span class="mono">${tot.toFixed(2)} tCO₂e / 年</span></b>
+        <div>範疇一（柴油）：${s1.toFixed(2)} tCO₂e｜範疇二（電力，採 114 年 0.466 係數）：${s2.toFixed(2)} tCO₂e</div>
+        <div style="color:var(--ok-ink);font-weight:700;margin-top:3px">💰 採用 SaaS 訂閱制（年費 12 萬）對比聘請專職盤查人員（年薪 60 萬），每年淨省約 NT$ 480,000！</div>
+      </div>
+    `;
+  }
+
+  // 5. 決策點 4 選方案 B：風險熱度圖 ⇄ SWOT／四象限行動辨別矩陣切換 + 周邊文字解析報告 (S-06)
+  function enhanceRiskHeatmapSwot() {
+    document.querySelectorAll('[data-heat]').forEach((heatBox, idx) => {
+      const card = heatBox.closest('.card');
+      if (!card) return;
+      const head = card.querySelector('.card-head');
+      if (head && !head.querySelector('.r2-swot-toggle')) {
+        const seg = document.createElement('div');
+        seg.className = 'seg r2-swot-toggle';
+        seg.innerHTML = `
+          <button type="button" data-r2-heat="heat" aria-pressed="${heatViewMode === 'heat'}">▦ 部門風險熱度圖</button>
+          <button type="button" data-r2-heat="swot" aria-pressed="${heatViewMode === 'swot'}">⊞ SWOT 四象限行動辨別矩陣（含文字解析）</button>
+        `;
+        head.appendChild(seg);
+      }
+
+      let swotWrap = card.querySelector('.r2-swot-wrap');
+      if (!swotWrap) {
+        swotWrap = document.createElement('div');
+        swotWrap.className = 'r2-swot-wrap';
+        card.appendChild(swotWrap);
+      }
+
+      card.querySelectorAll('[data-r2-heat]').forEach(b => {
+        b.setAttribute('aria-pressed', String(b.dataset.r2Heat === heatViewMode));
+      });
+
+      if (heatViewMode === 'swot') {
+        heatBox.hidden = true;
+        swotWrap.hidden = false;
+        const recs = (typeof S !== 'undefined' && Array.isArray(S.records)) ? S.records : [];
+        const q1 = recs.filter(r => r.status.includes('衝突') || r.status.includes('高風險'));
+        const q2 = recs.filter(r => r.missing || r.status.includes('補'));
+        const q3 = recs.filter(r => r.status === '待人工複核' && !r.missing);
+        const q4 = recs.filter(r => r.status === '已通過');
+
+        swotWrap.innerHTML = `
+          <div class="r2-swot-grid">
+            <div class="r2-swot-box" style="border-left:4px solid var(--red)">
+              <h4><span>🔴 象限一（T 威脅／高風險異常）：立即攔截重核</span><span class="badge risk">${q1.length} 筆</span></h4>
+              <p class="muted" style="margin:0 0 6px;font-size:11.5px">定義：跨來源數值衝突、單位混用（L/kg）或跨年度未分拆，查證時極易被開立重大缺失。</p>
+              <div style="font-size:12px"><b>目前項目：</b>${q1.map(r => `${r.id}（${r.dept}・${r.item}）`).join('、') || '無高風險項目'}</div>
+              <div style="margin-top:6px;color:var(--risk-ink);font-size:11.5px">👉 <b>建議行動：</b>由盤查主管退回原部門重對原始油單／電費單，完成雙向核對後方可放行。</div>
+            </div>
+            <div class="r2-swot-box" style="border-left:4px solid var(--amber)">
+              <h4><span>🟡 象限二（W 弱點／佐證缺漏）：限期跨部門補件</span><span class="badge warn">${q2.length} 筆</span></h4>
+              <p class="muted" style="margin:0 0 6px;font-size:11.5px">定義：僅有設備銘牌或預估值，缺乏同期間充電紀錄、運轉工時或材料原單[cite: 17, 18]。</p>
+              <div style="font-size:12px"><b>目前項目：</b>${q2.map(r => `${r.id}（${r.dept}・缺${r.missing || '單據'}）`).join('、') || '無缺件項目'}</div>
+              <div style="margin-top:6px;color:var(--warn-ink);font-size:11.5px">👉 <b>建議行動：</b>發送補件提醒予現場或採購單位；若生產已結束無法補單，須加註「±誤差區間免責聲明」[cite: 14, 17]。</div>
+            </div>
+            <div class="r2-swot-box" style="border-left:4px solid var(--blue)">
+              <h4><span>🔵 象限三（O 機會／待常規複核）：批次快速簽核</span><span class="badge info">${q3.length} 筆</span></h4>
+              <p class="muted" style="margin:0 0 6px;font-size:11.5px">定義：單據齊全且格式固定（如台電電費單、自來水單），可透過批次 OCR 與單人複核加速結案[cite: 4, 14, 17]。</p>
+              <div style="font-size:12px"><b>目前項目：</b>${q3.slice(0, 4).map(r => `${r.id}（${r.dept}）`).join('、')}${q3.length > 4 ? ' 等 ' + q3.length + ' 筆' : ''}</div>
+              <div style="margin-top:6px;color:var(--info-ink);font-size:11.5px">👉 <b>建議行動：</b>啟用「每 10 筆批次複核」或主管一鍵核准，縮短行政承辦工時[cite: 18]。</div>
+            </div>
+            <div class="r2-swot-box" style="border-left:4px solid var(--emerald)">
+              <h4><span>🟢 象限四（S 優勢／已核准合規）：數位指紋封存</span><span class="badge ok">${q4.length} 筆</span></h4>
+              <p class="muted" style="margin:0 0 6px;font-size:11.5px">定義：已完成人員確認、主管核准、數位指紋綁定與係數鎖定，具備完整查證追溯力[cite: 4, 18]。</p>
+              <div style="font-size:12px"><b>目前狀態：</b>共 ${q4.length} 筆已鎖定係數版次並寫入操作紀錄鏈。</div>
+              <div style="margin-top:6px;color:var(--ok-ink);font-size:11.5px">👉 <b>建議行動：</b>直接納入年度清冊與 2027 減碳基線預測模型。</div>
+            </div>
+          </div>
+          <div class="banner info mt-s">
+            <span>📝</span>
+            <div>
+              <b>周邊文字解析報告（自動生成｜S-06 實務改善）</b>
+              目前全廠共 <b>${recs.length}</b> 筆活動紀錄：高風險威脅佔 <b>${q1.length}</b> 筆（主要集中於生產部單位混用與跨期帳單）、待補佐證弱點佔 <b>${q2.length}</b> 筆（集中於電池銘牌、氧氣機工時與上游運輸）。建議優先處理象限一與象限二共 <b>${q1.length + q2.length}</b> 筆項目，即可將盤查資料完整度推進至 95% 以上[cite: 14, 17, 18]。
+            </div>
+          </div>
+        `;
+      } else {
+        heatBox.hidden = false;
+        swotWrap.hidden = true;
+      }
+    });
+  }
+
+  // 6. S-02 產能與減碳預測「評估模式選擇」 + S-11 月視角 ⇄ 季視角（Q1–Q4）切換
+  function enhanceBaselineAndQuarterly() {
+    // (A) S-02 基線沙盒新增「評估模式選擇」子項（10:40-11:29）
+    const bfCard = document.getElementById('baselineCard');
+    if (bfCard && !document.getElementById('r2BfPresetBar')) {
+      const gateBanner = document.getElementById('bfGateBanner');
+      const bar = document.createElement('div');
+      bar.id = 'r2BfPresetBar';
+      bar.className = 'banner info mt-s';
+      bar.innerHTML = `
+        <span>🎛️</span>
+        <div style="width:100%">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+            <b>S-02 產能與成本條件評估模式選擇（依訪談 10:40–11:29 建議增設｜模擬）</b>
+            <span class="badge warn">模擬推估</span>
+          </div>
+          <p class="muted" style="margin:3px 0 8px;font-size:11.5px">一鍵套用不同營運前提（原物料、電力、人力投入與產能增減條件），觀察 2027 減碳預測線與投資回收之動態變化[cite: 14, 17, 21]：</p>
+          <div class="head-tools">
+            <button class="btn sm primary" type="button" data-r2-bfmode="normal">① 現況維持模式（原物料／電力／人力正常不變：產能 0%、節能 5%）</button>
+            <button class="btn sm" type="button" data-r2-bfmode="expand">② 產能擴張＋設備汰換模式（產能 +18%、電力節能 20%、製程改善 25%）</button>
+            <button class="btn sm" type="button" data-r2-bfmode="netzero">③ 法規加嚴積極減碳模式（產能 +8%、綠電與節能 35%、電動化 40%）</button>
+          </div>
+        </div>
+      `;
+      if (gateBanner && gateBanner.parentNode) gateBanner.parentNode.insertBefore(bar, gateBanner.nextSibling);
+    }
+
+    // (B) S-11 月度趨勢圖支援「季視角 Q1–Q4（人工填錄延遲緩衝）」切換（11:32-13:10）
+    document.querySelectorAll('#execTrendCard .card-head .seg, #portal-dashboard .card-head .seg').forEach(seg => {
+      if (!seg.querySelector('[data-r2-qview]')) {
+        const qBtn = document.createElement('button');
+        qBtn.type = 'button';
+        qBtn.dataset.r2Qview = 'quarter';
+        qBtn.textContent = '📊 Q1–Q4 季視角（人工填錄延遲緩衝）';
+        seg.appendChild(qBtn);
+      }
+      const qBtn = seg.querySelector('[data-r2-qview]');
+      if (qBtn) qBtn.setAttribute('aria-pressed', String(quarterMode));
+    });
+
+    ['etChartBox', 'dbTrendChartBox'].forEach(boxId => {
+      const box = document.getElementById(boxId);
+      if (!box) return;
+      let qOverlay = document.getElementById(boxId + '_qview');
+      if (!qOverlay) {
+        qOverlay = document.createElement('div');
+        qOverlay.id = boxId + '_qview';
+        box.parentNode.insertBefore(qOverlay, box.nextSibling);
+      }
+      if (quarterMode) {
+        box.hidden = true;
+        qOverlay.hidden = false;
+        const qData = [
+          ['2026 Q1（1–3 月彙總）', 2685.4, 2610.0, '帳單與人工抄表已收齊（延遲已收斂）'],
+          ['2026 Q2（4–6 月彙總）', 2590.2, 2580.0, '6 月部分現場銘牌待補工時佐證'],
+          ['2026 Q3（7–9 月彙總）', 2480.6, 2550.0, '✓ 已低於季度減碳目標（節能奏效）'],
+          ['2026 Q4（10–12 月預估）', 2410.0, 2520.0, '人工填錄與跨年帳單分拆緩衝期（模擬）']
+        ];
+        qOverlay.innerHTML = `
+          <div class="et-chart">
+            <div class="banner info" style="margin-bottom:10px">
+              <span>⏱️</span>
+              <div><b>S-11 季度彙整視角（Q1–Q4｜模擬）</b>：實務上中小企業能源資料庫多靠人工填錄，常有時間延遲而難以做到即時月頻率，改以「季（Quarter）」為檢視單位更貼近工廠真實作業節奏[cite: 17]。</div>
+            </div>
+            <div class="grid" style="grid-template-columns:repeat(4,minmax(160px,1fr));gap:10px">
+              ${qData.map(([q, act, tgt, note]) => {
+                const beat = act <= tgt;
+                return `<div class="p-card" style="background:var(--surface);border-top:3px solid ${beat ? 'var(--emerald)' : 'var(--amber)'}">
+                  <b style="font-size:13px">${q}</b>
+                  <div style="font-size:18px;font-weight:900;margin:6px 0;font-family:var(--mono)">${act.toLocaleString()} <small style="font-size:11px">tCO₂e</small></div>
+                  <div class="muted" style="font-size:11px">季度目標：${tgt.toLocaleString()} tCO₂e</div>
+                  <span class="badge ${beat ? 'ok' : 'warn'}" style="margin-top:6px">${beat ? '✓ 達標' : '待收斂'}｜${note}</span>
+                </div>`;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      } else {
+        box.hidden = false;
+        qOverlay.hidden = true;
+      }
+    });
+  }
+
+  // 7. S-07 範疇 1/2/3 圖示歸屬引導器 + S-08 批次 OCR 提示 + 決策點 2A 電子簽章與誤差保護
+  function enhanceCaptureAndReports() {
+    // (A) 上傳區新增 S-07「資料歸入哪個範疇不清」圖示快速選擇器 + 決策點 2A 電子簽章
+    const capScope = document.getElementById('capScope');
+    if (capScope && !document.getElementById('r2ScopeGuide')) {
+      const lbl = capScope.closest('label');
+      const guide = document.createElement('div');
+      guide.id = 'r2ScopeGuide';
+      guide.className = 'full';
+      guide.style.cssText = 'padding:10px 12px;border-radius:8px;background:var(--bg-2);border:1px solid var(--line-2);font-size:12px;';
+      guide.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:6px">
+          <b style="color:var(--teal-ink)">🧭 S-07 單據範疇歸屬圖示引導器（不知道該放進哪裡？點圖示自動歸類並核對部門）：</b>
+          <span class="badge info">防拍錯部門混亂（S-08）</span>
+        </div>
+        <div class="chips" style="margin-top:4px">
+          <button class="chip" type="button" data-r2-scopepick="Scope 2|總務部|制式單據|台電外購電力電費單">⚡ 外購電費單 → 範疇 2（總務部）</button>
+          <button class="chip" type="button" data-r2-scopepick="Scope 1|生產部|制式單據|廠內柴油堆高機加油單">🚜 堆高機／發電機柴油 → 範疇 1（生產部）</button>
+          <button class="chip" type="button" data-r2-scopepick="Scope 1|總務部|制式單據|空調冷媒 R-410A 補充維修單">❄️ 冷媒逸散補充 → 範疇 1（總務部）</button>
+          <button class="chip" type="button" data-r2-scopepick="Scope 3|採購部|結構化匯入|上游供應商原物料貨運物流單">🚚 供應商物流運輸 → 範疇 3（採購部）</button>
+          <button class="chip" type="button" data-r2-scopepick="Scope 3|總務部|制式單據|員工商務差旅高鐵與航空票根">✈️ 員工商務差旅 → 範疇 3（總務部）</button>
+        </div>
+        <div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <label style="display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--ok-ink);cursor:pointer">
+            <input type="checkbox" id="r2CapESign" checked>
+            ✍️ 上傳人電子簽章確認（決策點 2A｜模擬）：本人確認單據來源部門無誤，上傳後自動綁定簽章與數位指紋[cite: 14, 17, 21]
+          </label>
+          <span class="badge mono">e-Sign: 模擬啟用</span>
+        </div>
+      `;
+      if (lbl && lbl.parentNode) lbl.parentNode.insertBefore(guide, lbl);
+    }
+
+    // (B) 單據庫 S-12 倉儲保存期限設定與調閱權限控管（21:44-24:15）
+    const evMeta = document.getElementById('evMeta');
+    if (evMeta && !document.getElementById('r2EvRetentionBar')) {
+      const bar = document.createElement('div');
+      bar.id = 'r2EvRetentionBar';
+      bar.className = 'banner info mt-s';
+      bar.innerHTML = `
+        <span>🗄️</span>
+        <div style="width:100%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <div>
+            <b>S-12 單據影像倉儲保存期限與二次調閱權限控管（模擬）</b>
+            <div class="muted" style="font-size:11.5px">避免累計數百張單據佔滿雲端空間：到期自動封存清理；調閱原始單據須經「部門主管＋內部稽核」權限雙重驗證[cite: 17]。</div>
+          </div>
+          <div class="head-tools">
+            <label style="font-size:11.5px;font-weight:700">自動清理期限：
+              <select class="field" id="r2RetentionSel" style="width:auto;min-height:28px;padding:2px 8px">
+                <option value="1">查證後 1 年自動清理</option>
+                <option value="3" selected>查證後 3 年自動封存清理（ISO 建議）</option>
+                <option value="7">保存 7 年（對齊稅務憑證）</option>
+              </select>
+            </label>
+            <span class="badge ok">🔒 調閱權限二次鎖定：已啟用</span>
+          </div>
+        </div>
+      `;
+      evMeta.parentNode.insertBefore(bar, evMeta);
+    }
+
+    // (C) 決策點 2A：報表中心新增「盤查誤差上下限與免責保護條款（模擬）」卡片
+    const repScreen = document.querySelector('#portal-front .screen[data-screen="reports"]');
+    if (repScreen && !document.getElementById('r2DisclaimerCard')) {
+      const card = document.createElement('article');
+      card.id = 'r2DisclaimerCard';
+      card.className = 'card mt';
+      card.style.borderColor = 'var(--amber)';
+      card.innerHTML = `
+        <div class="card-head">
+          <div>
+            <h3>🛡️ G-08 盤查誤差上下限設定（Uncertainty Bounds）與查證免責保護條款（決策點 2A｜模擬）</h3>
+            <p>回應實務專家（INT-04）建議：中小企業常有單據遺失、歷史過程無法補證或未完全告知之情形，系統須設定「正負誤差區間」與「電子簽認免責條款」以保護盤查人員與系統方[cite: 14, 17]</p>
+          </div>
+          <span class="badge warn">模擬保護機制</span>
+        </div>
+        <div class="form-grid" style="grid-template-columns:minmax(220px,1fr) minmax(0,2fr)">
+          <label class="lbl">缺單據／推估項目之盤查誤差上下限（±%）
+            <div style="display:flex;align-items:center;gap:8px">
+              <input class="field" id="r2ErrPct" type="range" min="1" max="15" step="1" value="${errBoundPct}" style="padding:0">
+              <strong class="mono" id="r2ErrPctVal">±${errBoundPct}%</strong>
+            </div>
+            <span class="hint">套用於運轉日誌推估、過磅回推與缺原單項目[cite: 17, 18]</span>
+          </label>
+          <div class="banner warn" style="margin:0">
+            <span>⚖️</span>
+            <div>
+              <b>報告書自動附帶之免責與誤差保護聲明（模擬條款）：</b>
+              「本清冊之排放量試算係依據受盤查企業截至盤查基準日所提供之單據與電子簽認紀錄。針對生產過程已結束且未能提供原始憑證之推估項目，系統已加計 <b>±<span id="r2ErrText">${errBoundPct}</span>% 盤查不確定性誤差上下限</b>；若因受盤查企業隱匿、漏報或未完全告知排放源所致之數據差異，由原填報簽認單位負完全法律責任[cite: 14, 17]。」
+            </div>
+          </div>
+        </div>
+      `;
+      repScreen.insertBefore(card, repScreen.firstChild);
+    }
+
+    // (D) 複核抽屜視窗（Drawer）補充顯示「電子簽章狀態」與「±誤差保護註記」
+    const dr = document.querySelector('#drawerHost .drawer');
+    if (dr && !dr.querySelector('#r2DrawerSignBox')) {
+      const trust = dr.querySelector('.trust');
+      if (trust) {
+        const sign = document.createElement('div');
+        sign.id = 'r2DrawerSignBox';
+        sign.className = 'banner ok mt-s';
+        sign.style.fontSize = '11.5px';
+        sign.innerHTML = `
+          <span>✍️</span>
+          <div>
+            <b>電子簽章與責任追溯（決策點 2A｜模擬）</b>
+            上傳人已於送審時完成電子簽認（綁定 SHA-256 數位指紋）；若原始單據缺漏採推估法，自動套用 ±${errBoundPct}% 誤差上下限免責保護條款[cite: 14, 17]。
+          </div>
+        `;
+        trust.parentNode.insertBefore(sign, trust.nextSibling);
+      }
+    }
+  }
+
+  // 8. 工程層與內容層（G-04 API 三態含 404、G-05 模組五欄規格卡、G-07 欄位字典、G-09 邏輯模組邊界圖、G-12 / S-04 方法論單一對應表）
+  function enhanceEngineeringAndMethodology() {
+    // (A) G-05 模組規格卡（問題/方法/輸入/輸出/畫面說明）+ S-15 圖示化 + G-12/S-04 方法論單一對應表
+    const ragScreen = document.querySelector('#portal-front .screen[data-screen="rag"]');
+    if (ragScreen && !document.getElementById('r2MethodMapCard')) {
+      // 升級六大模組卡為五欄規格卡 + 視覺圖示 (G-05 & S-15)
+      const modGrid = ragScreen.querySelector('.module-grid');
+      if (modGrid && !modGrid.dataset.r2Upgraded) {
+        const specs = [
+          ['01｜資料採集與防呆模組', '📷', '現場單據模糊、拍錯部門或單位換算錯誤', 'AOI 影像品質/完整性檢核（OCR 前閘門）＋功率換算小幫手', '單據影像／PDF、人工判讀值、部門與期間', 'SHA-256 數位指紋、品質評分、待複核紀錄', '對應「資料蒐集」與「行動版取像」畫面'],
+          ['02｜跨來源比對與批次檢核', '🛡️', 'Excel 申報與電費單不一致、CSV 含負值或跨期錯誤', '單一資料源比對＋整批資料正確性保護（異常整批退回）', 'CSV 批次檔、年度 12 個月電費/水費台帳', '衝突攔截警示、漏月與位數錯誤清單', '對應「年度帳單核對」與「CSV 批次匯入」畫面'],
+          ['03｜人機分工與盲核簽認', '✍️', 'AI 讀值無法直接採信、主管代改數據責任不清', '制式單據單人複核、現場讀表雙人盲核、電子簽章與退回修訂', '待複核紀錄、原始單據影像、覆核人盲核輸入值', '已通過／退回修訂狀態、前後版本差異紀錄', '對應「資料審核」與「複核抽屜視窗」畫面'],
+          ['04｜方法論與係數版次控管', '📐', '誤用過期排放係數、不清楚單據應歸入哪個範疇', '雙軌分類自動對應＋已核准紀錄鎖定當下係數版次', '活動數據、範疇類別、環境部公告電力與燃料係數', 'tCO₂e 試算結果、係數來源佐證指紋綁定', '對應「規則搜尋」與「知識庫與係數」畫面'],
+          ['05｜操作紀錄鏈與誤差保護', '⛓️', '事後查證找不到源頭、缺單據推估缺乏免責保護', '操作紀錄雜湊鏈（防竄改驗證）＋±誤差上下限免責聲明', '每一筆新增、修改、退回、核准事件與時間戳', '可驗證之操作紀錄鏈、查證附件包 JSON/Word', '對應「操作紀錄」與「報表中心」畫面'],
+          ['06｜產能基線與減碳預測沙盒', '📈', '企業主不知減碳投入回收期與產能變動對碳排之影響', '三種營運評估模式（含原物料/人力不變基線）＋季度緩衝視角', '預計產能成長率、綠電替換率、製程改善率', '2027 逐月預測折線、SWOT 四象限行動解析報告', '對應「企業動態儀表板」與「基線沙盒」畫面']
+        ];
+        modGrid.innerHTML = specs.map(s => `
+          <div class="module">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span class="code">${s[0]}</span>
+              <span style="font-size:20px" aria-hidden="true">${s[1]}</span>
+            </div>
+            <table class="r2-spec-tbl">
+              <tr><td>解決問題</td><td>${s[2]}</td></tr>
+              <tr><td>方法機制</td><td>${s[3]}</td></tr>
+              <tr><td>輸入資料</td><td>${s[4]}</td></tr>
+              <tr><td>輸出結果</td><td>${s[5]}</td></tr>
+              <tr><td>畫面說明</td><td class="muted">${s[6]}</td></tr>
+            </table>
+          </div>
+        `).join('');
+        modGrid.dataset.r2Upgraded = '1';
+      }
+
+      // 新增 G-12 / S-04 方法論對照頁（單一對應表）
+      const mapCard = document.createElement('article');
+      mapCard.id = 'r2MethodMapCard';
+      mapCard.className = 'card mt';
+      mapCard.innerHTML = `
+        <div class="card-head">
+          <div>
+            <h3>📘 G-12 / S-04 GHG Protocol × ISO 14064-1:2018 單一方法論對應表</h3>
+            <p>清楚呈現每類工廠常見單據如何對應至國際雙軌標準範疇、採信原則與系統防呆機制[cite: 3, 4, 17]</p>
+          </div>
+          <span class="badge ok">單一標準對應表</span>
+        </div>
+        <div class="table-wrap">
+          <table class="table" style="min-width:760px">
+            <thead>
+              <tr><th>工廠常見活動與單據來源</th><th>GHG Protocol 範疇</th><th>ISO 14064-1:2018 類別</th><th>本系統讀值與複核設計</th><th>查證必備佐證文件</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><b>鍋爐天然氣、柴油堆高機、公務車加油</b></td><td><span class="badge">Scope 1 直接排放</span></td><td>類別 1：直接溫室氣體排放（固定／移動燃燒）</td><td>人工判讀＋受控單位字典（防 L/kg 混用）</td><td>購油發票、油單、瓦斯費單或運轉日誌</td></tr>
+              <tr><td><b>廠房空調與冰水機冷媒（R-410A）補充</b></td><td><span class="badge">Scope 1 直接排放</span></td><td>類別 1：直接逸散排放</td><td>人工判讀補充量（kg）× GWP 版本鎖定</td><td>設備維修工單、冷媒充填收據與銘牌</td></tr>
+              <tr><td><b>台電外購電力（總電表／分電表）</b></td><td><span class="badge info">Scope 2 能源間接</span></td><td>類別 2：輸入能源之間接排放</td><td>12 個月台帳逐月比對（防漏月與跨年未分拆）</td><td>台電實體或官方電子電費單（官網截圖不採信）</td></tr>
+              <tr><td><b>委外貨運物流、員工商務差旅</b></td><td><span class="badge warn">Scope 3 其他間接</span></td><td>類別 3：運輸之間接排放</td><td>範疇歸屬圖示引導＋噸公里（t-km）推估</td><td>貨運對帳單、車型載重紀錄、差旅票根</td></tr>
+              <tr><td><b>外購原物料（如鋼胚、銅材、水泥）</b></td><td><span class="badge warn">Scope 3 其他間接</span></td><td>類別 4：組織使用產品之間接排放</td><td>過磅單（總重−空車重）淨重回推＋供應商單向填報</td><td>過磅單、進貨發票（第二級佐證）、供應商係數聲明</td></tr>
+            </tbody>
+          </table>
+        </div>
+      `;
+      ragScreen.appendChild(mapCard);
+    }
+
+    // (B) G-04 API 三態表（含 /api/rag、/api/aoi 404 未實作）、G-07 資料表字典、G-09 邏輯模組邊界圖
+    const platScreen = document.querySelector('#portal-admin .screen[data-screen="platform"]');
+    if (platScreen && !document.getElementById('r2ArchAndDictBox')) {
+      // 更新 API 契約表為三態揭露（G-04 & A8）
+      const tables = platScreen.querySelectorAll('table.table');
+      const apiTbl = tables[tables.length - 1];
+      if (apiTbl) {
+        apiTbl.innerHTML = `
+          <thead>
+            <tr><th>方法</th><th>API 端點路徑</th><th>三態實作狀態（A8 誠實揭露）</th><th>功能說明與目前原型行為</th><th>失敗／例外回應</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="badge info">POST</span></td><td class="mono">/api/evidence</td><td><span class="badge ok">🟢 已實作（前端本機）</span></td><td>於瀏覽器端計算 Web Crypto SHA-256 數位指紋並執行 AOI 影像品質/完整性檢核（OCR 前閘門）</td><td>413 檔案逾 10MB／品質未過攔截</td></tr>
+            <tr><td><span class="badge info">POST</span></td><td class="mono">/api/objects</td><td><span class="badge warn">🟡 模擬（本機狀態中樞）</span></td><td>人工判讀確認後建立活動紀錄（固定 <code>model_status: "not_run"</code>）並執行跨來源衝突比對</td><td>409 跨來源數值衝突</td></tr>
+            <tr><td><span class="badge info">POST</span></td><td class="mono">/api/imports/csv</td><td><span class="badge ok">🟢 已實作（前端本機）</span></td><td>CSV 批次資料正確性保護：任一列含負值、未知單位或跨期錯誤即整批退回零寫入</td><td>422 Unprocessable Entity（整批零寫入）</td></tr>
+            <tr><td><span class="badge ok">PATCH</span></td><td class="mono">/api/records/{id}/approve</td><td><span class="badge warn">🟡 模擬（本機角色切換）</span></td><td>主管核准、盲核比對與職務分離（SoD）檢查，核准後鎖定當下排放係數版次</td><td>403 違反職務分離／缺件阻擋</td></tr>
+            <tr><td><span class="badge">GET</span></td><td class="mono">/api/audit/verify</td><td><span class="badge ok">🟢 已實作（前端本機）</span></td><td>逐筆重算 SHA-256 操作紀錄雜湊鏈，即時偵測並定位任何竄改斷點</td><td>回報第一個斷點序號 brokenAt</td></tr>
+            <tr style="background:var(--risk-bg)"><td><span class="badge risk">POST</span></td><td class="mono">/api/aoi</td><td><span class="badge risk">🔴 未實作（HTTP 404）</span></td><td>自動文字數值擷取（OCR）與設備模型推論端點尚未部署；目前畫面一律如實呈現「人工判讀」</td><td><b>404 Not Found（未實作，不得宣稱可用）</b></td></tr>
+            <tr style="background:var(--risk-bg)"><td><span class="badge risk">POST</span></td><td class="mono">/api/rag</td><td><span class="badge risk">🔴 未實作（HTTP 404）</span></td><td>生成式雲端 RAG 端點尚未部署；目前僅使用前端本機固定知識條目關鍵詞比對</td><td><b>404 Not Found（未實作，不得宣稱可用）</b></td></tr>
+          </tbody>
+        `;
+      }
+
+      const box = document.createElement('div');
+      box.id = 'r2ArchAndDictBox';
+      box.innerHTML = `
+        <!-- G-09 邏輯模組邊界圖（嚴禁稱微服務） -->
+        <article class="card mt">
+          <div class="card-head">
+            <div>
+              <h3>🧩 G-09 系統邏輯模組邊界圖（Logical Module Boundaries｜單檔前端研究原型）</h3>
+              <p>遵守 A8 / G-09 規範：本原型為單一 HTML 檔案內之邏輯模組分工，非分散式微服務架構；外部 ERP 與資料庫均為模擬示意[cite: 3]</p>
+            </div>
+            <span class="badge warn">模擬架構邊界</span>
+          </div>
+          <div class="r2-arch-flow">
+            <div class="r2-arch-node"><b>① 邊緣取像與防呆模組</b><br>・AOI 影像品質/完整性檢核（OCR 前閘門）<br>・Web Crypto SHA-256 數位指紋<br>・<span class="badge ok">本機已實作</span></div>
+            <div class="r2-arch-node"><b>② 資料治理與人機複核模組</b><br>・單筆人工判讀＋CSV 整批檢核<br>・跨來源衝突攔截＋盲核／電子簽章<br>・<span class="badge warn">前端狀態機模擬</span></div>
+            <div class="r2-arch-node"><b>③ 規則檢索與係數計算模組</b><br>・本機關鍵詞規則索引＋係數版次鎖定<br>・<code>/api/aoi</code> 與 <code>/api/rag</code><br>・<span class="badge risk">雲端推論 404 未實作</span></div>
+            <div class="r2-arch-node"><b>④ 追溯留痕與決策輸出模組</b><br>・SHA-256 操作紀錄鏈驗證<br>・2027 基線沙盒＋±誤差免責報表<br>・<span class="badge ok">本機匯出已實作</span></div>
+          </div>
+        </article>
+
+        <!-- G-07 資料表與欄位字典（明確標註模擬、尚未串接外部資料庫） -->
+        <article class="card mt">
+          <div class="card-head">
+            <div>
+              <h3>🗂️ G-07 核心資料表與欄位字典（Data Dictionary｜本機 localStorage 模擬結構）</h3>
+              <p>遵守 G-07 規範：以下資料結構目前保存在瀏覽器本機記憶體與 localStorage 中，尚未實際串接外部 SQL 伺服器或企業 ERP[cite: 3]</p>
+            </div>
+            <span class="badge warn">模擬結構｜未串接外部 DB</span>
+          </div>
+          <div class="table-wrap">
+            <table class="table" style="min-width:720px">
+              <thead><tr><th>邏輯資料表名稱</th><th>主鍵 / 核心欄位</th><th>資料型態與約束規則</th><th>研究治理用途說明</th><th>串接狀態</th></tr></thead>
+              <tbody>
+                <tr><td class="mono">records（活動數據清冊）</td><td class="mono">id, period, site, device_key, activity_value, activity_unit, factor, status</td><td><code>activity_value >= 0</code>；<code>unit</code> 受控字典；<code>model_status = "not_run"</code></td><td>保存每筆活動數據、來源部門、複核狀態與電子簽章註記</td><td><span class="badge warn">本機模擬</span></td></tr>
+                <tr><td class="mono">evidence（單據數位指紋表）</td><td class="mono">rec_id, name, evType, sha256, by, ts, retention_years</td><td>64 碼 Hex SHA-256；制式單據僅官網截圖時維持待補證</td><td>綁定原始單據檔案指紋與保存期限，防範事後抽換單據</td><td><span class="badge warn">本機模擬</span></td></tr>
+                <tr><td class="mono">factors（排放係數版本表）</td><td class="mono">code, type, unit, rate, ver, status, doc.sha256</td><td><code>status IN ('verified','outdated','pending','superseded')</code></td><td>控管係數有效狀態；已核准紀錄鎖定當下係數版次不回溯</td><td><span class="badge warn">本機模擬</span></td></tr>
+                <tr><td class="mono">audit（操作紀錄雜湊鏈）</td><td class="mono">seq, ts, actor, role, action, target, prev, hash</td><td><code>hash = SHA256(prev | seq | ts | actor | action | target | detail)</code></td><td>Append-only 不可竄改操作紀錄鏈，支援斷點自動偵測</td><td><span class="badge ok">本機已實作</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      `;
+      platScreen.appendChild(box);
+    }
+  }
+
+  // 9. 事件處理委派（切換模式、切換訂閱方案、切換產業模板、切換 SWOT、切換季視角、套用預測模式）
+  document.addEventListener('click', ev => {
+    const t = ev.target;
+
+    const actBtn = t.closest('[data-r2-act]');
+    if (actBtn) {
+      const act = actBtn.dataset.r2Act;
+      if (act === 'toggle-ex-mode') {
+        exMode = !exMode;
+        sessionStorage.setItem(EX_KEY, exMode ? '1' : '0');
+        runR2All();
+      } else if (act === 'open-saas-modal') {
+        const landing = document.querySelector('#modeNav [data-mode="landing"]');
+        if (landing) landing.click();
+        setTimeout(() => {
+          const box = document.getElementById('r2LandingExhibitionBox');
+          if (box) box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 60);
+      } else if (act === 'submit-contact') {
+        const mail = (document.getElementById('r2ContactMail') || {}).value || '';
+        alert('【模擬送出成功】已記錄諮詢信箱：' + (mail || '示範企業') + '（本原型為單機模擬，不會實際對外發送信件）。');
+      }
+      return;
+    }
+
+    const planCard = t.closest('[data-r2-plan]');
+    if (planCard) {
+      selectedPlan = planCard.dataset.r2Plan;
+      renderLandingExhibition();
+      return;
+    }
+
+    const indBtn = t.closest('[data-r2-ind]');
+    if (indBtn) {
+      selectedInd = indBtn.dataset.r2Ind;
+      renderLandingExhibition();
+      return;
+    }
+
+    const heatBtn = t.closest('[data-r2-heat]');
+    if (heatBtn) {
+      heatViewMode = heatBtn.dataset.r2Heat;
+      enhanceRiskHeatmapSwot();
+      return;
+    }
+
+    const qBtn = t.closest('[data-r2-qview]');
+    if (qBtn) {
+      quarterMode = !quarterMode;
+      enhanceBaselineAndQuarterly();
+      return;
+    }
+
+    // S-11 點擊原本的 1-12 月按鈕時切回月視角
+    const etSpan = t.closest('[data-act="et-span"]');
+    if (etSpan && quarterMode) {
+      quarterMode = false;
+      setTimeout(enhanceBaselineAndQuarterly, 20);
+      return;
+    }
+
+    // S-02 產能預測三種評估模式一鍵套用
+    const bfModeBtn = t.closest('[data-r2-bfmode]');
+    if (bfModeBtn) {
+      const m = bfModeBtn.dataset.r2Bfmode;
+      const presets = {
+        normal:  { g: 0,  k: '11', s2: 5,  s1: 5  },
+        expand:  { g: 18, k: '11', s2: 20, s1: 25 },
+        netzero: { g: 8,  k: '9',  s2: 35, s1: 40 }
+      }[m];
+      if (presets) {
+        const setSlider = (id, v) => {
+          const el = document.getElementById(id);
+          if (el) {
+            el.value = v;
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        };
+        setSlider('bfGrowth', presets.g);
+        setSlider('bfTempK', presets.k);
+        setSlider('bfSaveS2', presets.s2);
+        setSlider('bfSaveS1', presets.s1);
+        setSlider('dbGrowth', presets.g);
+        setSlider('dbSaveS2', presets.s2);
+        setSlider('dbSaveS1', presets.s1);
+      }
+      return;
+    }
+
+    // S-07 範疇歸屬圖示引導器一鍵帶入
+    const scPick = t.closest('[data-r2-scopepick]');
+    if (scPick) {
+      const [sc, dept, dt, sampleItem] = scPick.dataset.r2Scopepick.split('|');
+      const setField = (id, v) => {
+        const el = document.getElementById(id);
+        if (el) { el.value = v; el.dispatchEvent(new Event('change', { bubbles: true })); }
+      };
+      setField('capScope', sc);
+      setField('capDept', dept);
+      setField('capDocType', dt);
+      const itemEl = document.getElementById('capItem');
+      if (itemEl && !itemEl.value.trim()) itemEl.value = sampleItem;
+      return;
+    }
+  });
+
+  document.addEventListener('input', ev => {
+    const t = ev.target;
+    if (t.id === 'r2QuickKwh' || t.id === 'r2QuickDiesel') updateQuickCalc();
+    if (t.id === 'r2ErrPct') {
+      errBoundPct = Number(t.value) || 5;
+      const vEl = document.getElementById('r2ErrPctVal');
+      const tEl = document.getElementById('r2ErrText');
+      if (vEl) vEl.textContent = '±' + errBoundPct + '%';
+      if (tEl) tEl.textContent = String(errBoundPct);
+    }
+  });
+
+  function runR2All() {
+    ensureInt04Record();
+    setupTopModeSwitch();
+    renderLandingExhibition();
+    enhanceRiskHeatmapSwot();
+    enhanceBaselineAndQuarterly();
+    enhanceCaptureAndReports();
+    enhanceEngineeringAndMethodology();
+  }
+
+  if (typeof subs !== 'undefined' && subs && typeof subs.add === 'function') {
+    subs.add(() => setTimeout(runR2All, 10));
+  }
+  document.addEventListener('click', () => setTimeout(runR2All, 25));
+  window.addEventListener('hashchange', () => setTimeout(runR2All, 25));
+  runR2All();
+  setTimeout(runR2All, 150);
+})();
+/* =========================================================================
+   26p. CarbonLens V9.06.5 Master Patch (20261102 人工校對 PPT 6頁全數修復・防衝突強化版)
+   - 自動攔截 26o 舊版 S.factors 陣列重置，確保「盤查流程漏斗 › 計算」長條圖 100% 正常顯示
+   - 自動將「⌂ 官方入口」升級為淡色背景 ＋ 2x2 四宮格白標商用圖卡
+   - 雙軌範疇結構改「橫向配置」填補左下方空白 ＋ 右側植入原生 SVG 動態六角雷達圖
+   - 修復審核抽屜「係數與試算」深色代碼框 (<pre class="code-box">) 完整公式呈現
+   ========================================================================= */
+(function applyPptV9065MasterPatch() {
+  'use strict';
+
+  if (window.__CL_PPT_V9065_MASTER_PATCH__) return;
+  window.__CL_PPT_V9065_MASTER_PATCH__ = true;
+
+  const GITHUB_BASE_URL = 'https://la05230000000-tech.github.io/carbonlens-demo/';
+  const SYSTEM_TITLE = 'CarbonLens 企業碳盤查系統';
+
+  // 論文雙軌示範數據定義
+  const THESIS_DUAL_PRESETS = Object.freeze({
+    field: {
+      id: 'field',
+      badge: '碩論大稿 4.2 節圖 4.2（工廠現場實測）',
+      item: '空壓機 A-05 分電表',
+      key: 'TY01-COMP-A05',
+      tri: 'T13',
+      value: 15280,
+      unit: 'kWh',
+      period: '2026-06',
+      site: '示範廠區',
+      factorId: 'TW-EF-114-IND',
+      factorRate: 0.466,
+      formulaNote: '15,280 kWh × 0.466 kgCO₂e/kWh ÷ 1,000 = 7.120 tCO₂e（SEU-02 重大能耗設備）'
+    },
+    taere: {
+      id: 'taere',
+      badge: 'TAERE 研討會論文第 4 節（端到端教學案例）',
+      item: '外購電力教學案例 (SYNTHETIC_ACTIVITY)',
+      key: 'SYNTHETIC_ACTIVITY',
+      tri: 'T13',
+      value: 100,
+      unit: 'kWh',
+      period: '2026-06',
+      site: '示範廠區',
+      factorId: 'MOENV-2026-v1',
+      factorRate: 0.494,
+      formulaNote: '100 kWh × 0.494 kgCO₂e/kWh ÷ 1,000 = 0.049 tCO₂e（論文表 3 標準驗算案例）'
+    }
+  });
+
+  // 標準排放係數字典定義（嚴格維持 Object 結構以相容 S.factors[r.factor]）
+  const STANDARD_FACTORS_DICT = Object.freeze({
+    'TW-EF-114-IND': {
+      type: '外購電力（表燈營業／高低特高壓）',
+      unit: 'kWh',
+      rate: 0.466,
+      src: '經濟部能源署 114 年度電力排碳係數公告（產業預設）',
+      ver: '114年度',
+      status: 'verified',
+      region: '台灣',
+      shortText: '① 0.466 kgCO₂e/kWh｜表燈營業、高低壓、特高壓（產業預設）',
+      doc: { name: '114年度電力排碳係數.pdf', sha256: '4a4fa4646c53ef8602878dd65e4879fc72313ded4e345f80644c3cb723b09f1c', ts: '2026-06-02 09:00' }
+    },
+    'TW-EF-114-AVG': {
+      type: '外購電力（發電業及自用發電整體平均）',
+      unit: 'kWh',
+      rate: 0.467,
+      src: '經濟部能源署 114 年度電力排碳係數公告（電業管制基準）',
+      ver: '114年度',
+      status: 'verified',
+      region: '台灣',
+      shortText: '② 0.467 kgCO₂e/kWh｜發電業及自用發電設備整體平均',
+      doc: { name: '114年度電力排碳係數.pdf', sha256: '4a4fa4646c53ef8602878dd65e4879fc72313ded4e345f80644c3cb723b09f1c', ts: '2026-06-02 09:00' }
+    },
+    'TW-EF-114-RES': {
+      type: '外購電力（表燈非營業／住宅宿舍）',
+      unit: 'kWh',
+      rate: 0.471,
+      src: '經濟部能源署 114 年度電力排碳係數公告（民生／宿舍）',
+      ver: '114年度',
+      status: 'verified',
+      region: '台灣',
+      shortText: '③ 0.471 kgCO₂e/kWh｜表燈非營業、住宅宿舍',
+      doc: { name: '114年度電力排碳係數.pdf', sha256: '4a4fa4646c53ef8602878dd65e4879fc72313ded4e345f80644c3cb723b09f1c', ts: '2026-06-02 09:00' }
+    },
+    'MOENV-2026-v1': {
+      type: '外購電力',
+      unit: 'kWh',
+      rate: 0.494,
+      src: '環境部公告（示範值）',
+      ver: '2026 v1',
+      status: 'verified',
+      region: '台灣',
+      shortText: '基準年對照：0.494 kgCO₂e/kWh（MOENV-2026-v1）',
+      doc: { name: '係數來源_外購電力_2026v1（示範）.pdf', sha256: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', ts: '2026-06-01 07:00' }
+    },
+    'MOENV-2026-v2': {
+      type: '柴油',
+      unit: 'L',
+      rate: 2.606,
+      src: '環境部係數管理表（示範值）',
+      ver: '2026 v2',
+      status: 'verified',
+      region: '台灣',
+      doc: { name: '係數來源_柴油_2026v2（示範）.pdf', sha256: '8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4', ts: '2026-06-01 07:00' }
+    },
+    'MOENV-2026-NG': {
+      type: '天然氣',
+      unit: 'm3',
+      rate: 1.879,
+      src: '環境部係數管理表（示範值）',
+      ver: '2026 v1',
+      status: 'verified',
+      region: '台灣',
+      doc: { name: '係數來源_天然氣_2026v1（示範）.pdf', sha256: '2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae', ts: '2026-06-01 07:00' }
+    },
+    'SUPPLIER-2025-v3': {
+      type: '天然氣',
+      unit: 'm3',
+      rate: 1.879,
+      src: '環境部／供應商核實係數',
+      ver: '2026 v1',
+      status: 'verified',
+      region: '台灣',
+      doc: { name: '係數來源_天然氣_2026v1（示範）.pdf', sha256: '2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae', ts: '2026-06-01 07:00' }
+    },
+    'IPCC-AR5-R410A': {
+      type: '冷媒 R-410A',
+      unit: 'kg',
+      rate: 1924,
+      src: 'IPCC AR5 GWP',
+      ver: 'AR5',
+      status: 'verified',
+      region: '台灣',
+      doc: { name: 'IPCC_AR5_GWP_Table.pdf', sha256: '4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a', ts: '2026-06-01 07:00' }
+    },
+    'GLEC-2026-v1': {
+      type: '道路貨運',
+      unit: 't-km',
+      rate: 0.132,
+      src: 'GLEC Framework（示範值）',
+      ver: '2026 v1',
+      status: 'verified',
+      region: '台灣',
+      doc: { name: '係數來源_道路貨運_GLEC（示範）.pdf', sha256: '4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce', ts: '2026-06-01 07:00' }
+    }
+  });
+
+  const UNIT_TO_FACTOR_KEY = Object.freeze({
+    'kWh': 'MOENV-2026-v1',
+    'L': 'MOENV-2026-v2',
+    'm3': 'MOENV-2026-NG',
+    'm³': 'MOENV-2026-NG',
+    'kg': 'IPCC-AR5-R410A',
+    't-km': 'GLEC-2026-v1'
+  });
+
+  // 動態雷達圖雙視角資料定義（對應 PPT 3～4）
+  const RADAR_DATASETS = Object.freeze({
+    budget: {
+      title: '企業部門減碳預算分配 vs. 實際能耗開銷（對齊管理會計控制視角）',
+      seriesA: '預算分配（目標配額）',
+      seriesB: '實際開銷（實測績效）',
+      max: 25000,
+      axes: [
+        { name: '產品製程 (SEU)', a: 19500, b: 13800, unit: 'NT$ 千元' },
+        { name: '研發與檢測', a: 16500, b: 20000, unit: 'NT$ 千元' },
+        { name: '品質測試 (AOI)', a: 15000, b: 14200, unit: 'NT$ 千元' },
+        { name: '市場與綠色供應鏈', a: 18000, b: 19200, unit: 'NT$ 千元' },
+        { name: '銷售與低碳物流', a: 17000, b: 14800, unit: 'NT$ 千元' },
+        { name: '資訊技術 (SSOT)', a: 22000, b: 20500, unit: 'NT$ 千元' },
+        { name: '廠務與客戶服務', a: 18500, b: 21500, unit: 'NT$ 千元' }
+      ]
+    },
+    seu: {
+      title: 'ISO 14064-1 × 重大能耗設備（SEU）能效目標基準 vs. 實測表現',
+      seriesA: '年度基準配額 (tCO₂e)',
+      seriesB: '實測排放績效 (tCO₂e)',
+      max: 100,
+      axes: [
+        { name: '中央冰水主機群', a: 88, b: 72, unit: '指標分' },
+        { name: '廠務變頻空壓機', a: 85, b: 68, unit: '指標分' },
+        { name: '製程蒸汽鍋爐', a: 80, b: 74, unit: '指標分' },
+        { name: '冷卻水塔泵浦群', a: 82, b: 70, unit: '指標分' },
+        { name: '單據數位指紋率', a: 90, b: 96, unit: '指標分' },
+        { name: 'DQI 數據品質度', a: 85, b: 92, unit: '指標分' }
+      ]
+    }
+  });
+
+  let isPatchRunning = false;
+  let currentRadarMode = 'budget';
+
+  function setHtmlOnce(el, html) {
+    if (el && el.innerHTML !== html) el.innerHTML = html;
+  }
+  function setTextOnce(el, txt) {
+    if (el && el.textContent !== txt) el.textContent = txt;
+  }
+
+  /* -------------------------------------------------------------------------
+     1. 注入專屬 CSS 樣式（PPT 1 淡色商用入口封面 ＋ PPT 2-4 橫向雙軌與雷達圖）
+     ------------------------------------------------------------------------- */
+  function injectV9065Styles() {
+    let style = document.getElementById('clPptV9065Styles');
+    if (!style) {
+      style = document.createElement('style');
+      style.id = 'clPptV9065Styles';
+      document.head.appendChild(style);
+    }
+    const css = `
+      /* PPT 1: 淡色背景與四宮格白標商用封面 */
+      #clCommercialCoverOverlay {
+        position: fixed; inset: 0; z-index: 9990;
+        background: linear-gradient(135deg, #f3f8fc 0%, #e5eff7 55%, #dce9f4 100%) !important;
+        color: #162a3d !important; display: none; align-items: center; justify-content: center;
+        padding: 24px; overflow-y: auto; font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      }
+      #clCommercialCoverOverlay.active { display: flex !important; }
+      .cl-light-cover-shell {
+        width: 100%; max-width: 1180px; display: grid;
+        grid-template-columns: 1.38fr 0.88fr; gap: 32px; align-items: stretch;
+        background: rgba(255, 255, 255, 0.65); border: 1px solid #c8dce9;
+        border-radius: 22px; padding: 34px 38px;
+        box-shadow: 0 20px 50px rgba(15, 45, 74, 0.12); backdrop-filter: blur(10px);
+      }
+      @media (max-width: 920px) {
+        .cl-light-cover-shell { grid-template-columns: 1fr; padding: 20px; }
+      }
+      .cl-light-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+      .cl-light-pill {
+        display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px;
+        border-radius: 999px; background: #e1effa; border: 1px solid #b7d4ea;
+        color: #13538a; font-size: 11.5px; font-weight: 800;
+      }
+      .cl-light-hero h1 {
+        margin: 0 0 4px; font-size: 32px; font-weight: 900; color: #0f2942; letter-spacing: 0.01em;
+      }
+      .cl-light-hero h2 {
+        margin: 0 0 18px; font-size: 26px; font-weight: 900; color: #008c7a;
+      }
+      .cl-light-grid4 {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;
+      }
+      @media (max-width: 640px) { .cl-light-grid4 { grid-template-columns: 1fr; } }
+      .cl-light-fcard {
+        background: #ffffff; border: 1px solid #d5e3ec; border-radius: 14px;
+        overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
+        box-shadow: 0 6px 18px rgba(18, 52, 86, 0.06);
+      }
+      .cl-light-fcard-body { padding: 14px 16px 12px; }
+      .cl-light-fcard-tag {
+        display: inline-flex; align-items: center; gap: 6px; font-size: 16px;
+        font-weight: 900; color: #0f5e8c; margin-bottom: 4px;
+      }
+      .cl-light-fcard-title {
+        font-size: 15px; font-weight: 900; color: #162a3d; margin-bottom: 6px; display: block;
+      }
+      .cl-light-fcard-desc {
+        font-size: 12px; color: #4c6275; line-height: 1.55; margin: 0;
+      }
+      .cl-light-fcard-foot {
+        padding: 7px 14px; text-align: center; font-size: 12px; font-weight: 800; color: #ffffff;
+      }
+      .cl-foot-blue { background: linear-gradient(90deg, #0d3b66, #1b6ca8); }
+      .cl-foot-green { background: linear-gradient(90deg, #0b6e4f, #17a368); }
+      .cl-foot-teal { background: linear-gradient(90deg, #0b4f6c, #0197ac); }
+      .cl-foot-navy { background: linear-gradient(90deg, #16263b, #2b456b); }
+      .cl-light-statbar {
+        display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+        background: #e8f4f8; border: 1px solid #bce0ec; border-radius: 12px; padding: 10px 16px;
+      }
+      .cl-light-stat small { display: block; font-size: 11px; color: #4b6578; font-weight: 700; }
+      .cl-light-stat strong { font-size: 18px; font-weight: 900; color: #0c2338; font-variant-numeric: tabular-nums; }
+      .cl-light-login-card {
+        background: #ffffff; border: 1px solid #d0e0ec; border-radius: 18px;
+        padding: 28px 26px; box-shadow: 0 14px 34px rgba(15, 45, 74, 0.09);
+        display: flex; flex-direction: column; justify-content: center;
+      }
+      .cl-light-login-card h3 { margin: 0 0 4px; font-size: 21px; font-weight: 900; color: #12283c; }
+      .cl-light-login-card .sub { margin: 0 0 18px; font-size: 12px; color: #647a8c; }
+      .cl-light-field { margin-bottom: 13px; }
+      .cl-light-field label { display: block; font-size: 12px; font-weight: 800; color: #364d60; margin-bottom: 5px; }
+      .cl-light-field input, .cl-light-field select {
+        width: 100%; padding: 9px 12px; border-radius: 8px;
+        border: 1px solid #c5d6e3; background: #f5f9fc; color: #162a3d;
+        font-size: 13px; font-weight: 600; outline: none;
+      }
+      .cl-light-field input:focus, .cl-light-field select:focus {
+        border-color: #0096c7; background: #ffffff; box-shadow: 0 0 0 3px rgba(0, 150, 199, 0.15);
+      }
+      .cl-light-btn-login {
+        width: 100%; padding: 11px 16px; border-radius: 8px; border: none;
+        background: linear-gradient(90deg, #0099cc, #00b4d8); color: #ffffff;
+        font-size: 14px; font-weight: 900; cursor: pointer; margin-top: 4px;
+        box-shadow: 0 4px 12px rgba(0, 153, 204, 0.3);
+      }
+      .cl-light-btn-login:hover { filter: brightness(1.05); }
+      .cl-light-btn-demo {
+        width: 100%; padding: 10px 14px; border-radius: 8px;
+        border: 1px solid #94d2bd; background: #effaf6; color: #0a7054;
+        font-size: 12.5px; font-weight: 800; cursor: pointer; margin-top: 10px;
+      }
+      .cl-light-btn-demo:hover { background: #dff5ec; }
+
+      /* PPT 2-4: 雷達圖懸浮 Tooltip */
+      .cl-radar-vertex { cursor: pointer; transition: r 0.15s ease, filter 0.15s ease; }
+      .cl-radar-vertex:hover { r: 6.5px; filter: drop-shadow(0 0 6px #38bdf8); }
+    `;
+    setTextOnce(style, css);
+  }
+
+  /* -------------------------------------------------------------------------
+     2. 【PPT 第 5 頁修復 + 舊版 26o 陣列衝突攔截】鎖定 S.factors 為標準物件字典
+     ------------------------------------------------------------------------- */
+  function lockFactorsDictionaryOnState(stObj) {
+    if (!stObj || typeof stObj !== 'object') return;
+
+    const cleanDict = {};
+    if (stObj.factors && typeof stObj.factors === 'object') {
+      Object.keys(stObj.factors).forEach(k => {
+        if (!/^\d+$/.test(k) && stObj.factors[k] && typeof stObj.factors[k] === 'object') {
+          cleanDict[k] = stObj.factors[k];
+        }
+      });
+    }
+    Object.keys(STANDARD_FACTORS_DICT).forEach(code => {
+      cleanDict[code] = Object.assign({}, cleanDict[code] || {}, STANDARD_FACTORS_DICT[code]);
+    });
+
+    // 在字典上掛載不可枚舉之空函式 find / unshift，使舊版 26o 呼叫時不報錯且不污染字典鍵值
+    ['find', 'unshift', 'push', 'forEach'].forEach(fnName => {
+      if (!Object.prototype.hasOwnProperty.call(cleanDict, fnName)) {
+        Object.defineProperty(cleanDict, fnName, {
+          value: function () { return null; },
+          writable: true,
+          enumerable: false,
+          configurable: true
+        });
+      }
+    });
+
+    // 攔截對 S.factors 的賦值：若舊版 26o 嘗試執行 S.factors = []，直接忽略以保護字典
+    try {
+      Object.defineProperty(stObj, 'factors', {
+        configurable: true,
+        enumerable: true,
+        get: function () { return cleanDict; },
+        set: function (val) {
+          if (val && typeof val === 'object' && !Array.isArray(val)) {
+            Object.keys(val).forEach(k => {
+              if (!/^\d+$/.test(k)) cleanDict[k] = val[k];
+            });
+          }
+        }
+      });
+    } catch (e) {
+      stObj.factors = cleanDict;
+    }
+  }
+
+  function enforceFactorsDictionaryAndFunnel() {
+    if (typeof S === 'undefined' || !S) return;
+
+    lockFactorsDictionaryOnState(S);
+    if (!S.activeElecFactorRate) S.activeElecFactorRate = 0.466;
+// ⚡ 自動補齊頂部動態儀表板與全系統所有「電力係數情境」下拉選單（114年3大公告係數 + 基準年共4選項）
+    const fullElecOptsHtml = `
+      <option value="0.466">115 年最新公告係數 0.466 kgCO₂e/kWh（產業預設）</option>
+      <option value="0.467">115 年電業平均係數 0.467 kgCO₂e/kWh（發電業平均）</option>
+      <option value="0.471">115 年非營業用係數 0.471 kgCO₂e/kWh（表燈非營業、宿舍）</option>
+      <option value="0.494">基準年電力係數 0.494 kgCO₂e/kWh（歷史對照）</option>
+    `.trim();
+
+    document.querySelectorAll('select').forEach(sel => {
+      if (sel.id === 'capFactor' || sel.id === 'capUnit' || sel.id === 'pUnit' || sel.id === 'sqlEngine') return;
+      const lbl = sel.closest('label') ? sel.closest('label').textContent : (sel.parentElement ? sel.parentElement.textContent : '');
+      const hasFactorVal = [...sel.options].some(o => o.value === '0.466' || o.value === '0.494' || o.text.includes('0.466') || o.text.includes('0.494'));
+      if (sel.id === 'bfElecFactor' || lbl.includes('外購電力') || lbl.includes('電力係數') || lbl.includes('係數情境') || hasFactorVal) {
+        const cur = sel.value || (S.activeElecFactorRate ? String(S.activeElecFactorRate) : '0.466');
+        if (sel.options.length < 4 || ![...sel.options].some(o => o.value === '0.467') || ![...sel.options].some(o => o.value === '0.471')) {
+          sel.innerHTML = fullElecOptsHtml;
+          sel.value = [...sel.options].some(o => o.value === cur) ? cur : '0.466';
+        }
+      }
+    });
+    // 確保 S.records 每一筆紀錄都有合法的 r.factor（解決漏斗「計算 = 0」與抽屜「未指定係數」）
+    if (Array.isArray(S.records)) {
+      S.records.forEach(r => {
+        if (!r) return;
+        r.model_status = 'not_run';
+        const unit = r.activity_unit || r.unit || 'kWh';
+        if (!r.factor || !S.factors[r.factor] || S.factors[r.factor].status !== 'verified') {
+          r.factor = UNIT_TO_FACTOR_KEY[unit] || 'MOENV-2026-v1';
+        }
+      });
+    }
+
+    // 即時更新前台「盤查流程漏斗 (#funnel)」中的「計算」長條圖與數字
+    const funnelEl = document.getElementById('funnel');
+    if (funnelEl && Array.isArray(S.records)) {
+      const liveRecs = S.records.filter(r => !['已作廢', '已分拆'].includes(r.status));
+      const totalN = Math.max(1, liveRecs.length);
+      const calcValidN = liveRecs.filter(r => {
+        const f = S.factors[r.factor];
+        return f && f.status === 'verified' && f.unit === r.activity_unit && Number.isFinite(Number(r.activity_value)) && Number(r.activity_value) >= 0;
+      }).length;
+
+      funnelEl.querySelectorAll('.fstep').forEach(step => {
+        const labelSpan = step.querySelector('span');
+        const barFill = step.querySelector('.bar > span');
+        const countB = step.querySelector('b');
+        if (labelSpan && labelSpan.textContent.trim().startsWith('計算') && countB && barFill) {
+          const pct = Math.round((calcValidN / totalN) * 100);
+          barFill.style.width = pct + '%';
+          setTextOnce(countB, String(calcValidN));
+        }
+      });
+    }
+
+    // 重新觸發單筆上傳係數選單渲染
+    if (typeof renderCapFactor === 'function') {
+      try { renderCapFactor(); } catch (e) {}
+    }
+  }
+
+  /* -------------------------------------------------------------------------
+     3. 【PPT 第 6 頁修復】修復審核抽屜「係數與試算」深色代碼框 (<pre class="code-box">)
+     ------------------------------------------------------------------------- */
+  function enforcePpt6DrawerFormulaBox() {
+    const dr = document.querySelector('#drawerHost .drawer');
+    if (!dr) return;
+
+    const h3 = dr.querySelector('.drawer-head h3');
+    const idMatch = h3 && h3.textContent ? h3.textContent.match(/REC-\d{4}-\d+/) : null;
+    const recId = idMatch ? idMatch[0] : (typeof drawerId !== 'undefined' ? drawerId : null);
+    const rec = (typeof S !== 'undefined' && S && Array.isArray(S.records) && recId)
+      ? S.records.find(x => x.id === recId)
+      : null;
+
+    const unit = rec ? (rec.activity_unit || 'kWh') : 'L';
+    const val = rec && Number.isFinite(Number(rec.activity_value)) ? Number(rec.activity_value) : 420;
+    const fKey = (rec && rec.factor && S.factors[rec.factor]) ? rec.factor : (UNIT_TO_FACTOR_KEY[unit] || 'MOENV-2026-v2');
+    const fObj = (S && S.factors && S.factors[fKey]) ? S.factors[fKey] : STANDARD_FACTORS_DICT[fKey];
+    const rate = fObj ? fObj.rate : 2.606;
+    const tco2e = ((val * rate) / 1000).toFixed(3);
+    const gCount = (typeof gateCount === 'function' && typeof S !== 'undefined') ? gateCount(S) : 3;
+
+    dr.querySelectorAll('.sec').forEach(sec => {
+      const h4 = sec.querySelector('h4');
+      if (!h4 || !h4.textContent.includes('係數與試算')) return;
+
+      const existingPre = sec.querySelector('pre.code-box');
+      if (!existingPre || existingPre.textContent.includes('未指定')) {
+        const formulaHtml =
+          `<h4>係數與試算</h4>` +
+          `<pre class="code-box">${val.toLocaleString('zh-TW')} ${unit} × ${rate} kgCO₂e/${unit} ÷ 1000\n` +
+          `= ${tco2e} tCO₂e\n` +
+          `係數：${fKey}｜${fObj ? fObj.src : '環境部公告（示範值）'}｜${fObj ? fObj.ver : '2026 v1'}</pre>` +
+          `<p class="hint">核准後計入範疇統計；核准總排放量需三物件閘門解鎖（目前 ${gCount}/3）。</p>`;
+        setHtmlOnce(sec, formulaHtml);
+      }
+    });
+  }
+
+  /* -------------------------------------------------------------------------
+     4. 【PPT 第 1 頁修復】淡色背景與四宮格白標商用登入封面
+     ------------------------------------------------------------------------- */
+  function enforcePpt1LightCommercialCover() {
+    if (document.title !== SYSTEM_TITLE) document.title = SYSTEM_TITLE;
+
+    const navBar = document.querySelector('#topTabs, #modeNav, .portal-nav, header nav.modes');
+    if (navBar && !document.getElementById('btnPpt1OfficialPortal')) {
+      const btn = document.createElement('button');
+      btn.id = 'btnPpt1OfficialPortal';
+      btn.type = 'button';
+      btn.style.cssText = 'color:#7ef4ff;border:1px solid rgba(0,210,255,0.45);font-weight:800;border-radius:7px;padding:6px 12px;';
+      btn.textContent = '⌂ 官方入口';
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        const ov = document.getElementById('clCommercialCoverOverlay');
+        if (ov) ov.classList.add('active');
+      });
+      navBar.insertBefore(btn, navBar.firstChild);
+    }
+
+    let overlay = document.getElementById('clCommercialCoverOverlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.id = 'clCommercialCoverOverlay';
+      document.body.appendChild(overlay);
+    }
+
+    const pendCount = (typeof S !== 'undefined' && S && Array.isArray(S.records))
+      ? S.records.filter(r => !['已通過', '已作廢', '已分拆', '已撤回', '退回修訂'].includes(r.status)).length
+      : 9;
+
+    const lightCoverHtml = `
+      <div class="cl-light-cover-shell" role="dialog" aria-label="CarbonLens 企業碳盤查系統官方入口">
+        <div class="cl-light-hero">
+          <div class="cl-light-pills">
+            <span class="cl-light-pill">🌐 B2B Enterprise SaaS ｜ ISO 14064-1:2018 × GHG Protocol 雙軌查證平台</span>
+            <span class="cl-light-pill" style="background:#eef4f8;color:#3b556b;border-color:#cbdbe6;">AI 協助辨識 × 每筆數據可追溯</span>
+          </div>
+          <h1>${SYSTEM_TITLE}</h1>
+          <h2>企業級溫室氣體盤查與資料治理平台</h2>
+
+          <div class="cl-light-grid4">
+            <div class="cl-light-fcard">
+              <div class="cl-light-fcard-body">
+                <span class="cl-light-fcard-tag">💡 專業</span>
+                <b class="cl-light-fcard-title">AI+AOI 邊緣智能辨識</b>
+                <p class="cl-light-fcard-desc">現場設備、電表拍照品質檢查防呆、單據數位指紋存證、100% 雙向數據連動。</p>
+              </div>
+              <div class="cl-light-fcard-foot cl-foot-blue">人機協作 (HITL) 高精度判讀</div>
+            </div>
+
+            <div class="cl-light-fcard">
+              <div class="cl-light-fcard-body">
+                <span class="cl-light-fcard-tag" style="color:#0b7a53;">🌱 永續</span>
+                <b class="cl-light-fcard-title">淨零減碳與雙軌申報</b>
+                <p class="cl-light-fcard-desc">符合 GHG Protocol 與 ISO 14064-1:2018 規範，組織與活動數據全面納管（Scope 1 / 2 / 3）。</p>
+              </div>
+              <div class="cl-light-fcard-foot cl-foot-green">♻️ 法定計量單位 tCO₂e</div>
+            </div>
+
+            <div class="cl-light-fcard">
+              <div class="cl-light-fcard-body">
+                <span class="cl-light-fcard-tag" style="color:#007791;">🛡️ 合規</span>
+                <b class="cl-light-fcard-title">密碼學級稽核軌跡</b>
+                <p class="cl-light-fcard-desc">Web Crypto SHA-256 證據綁定、操作紀錄鏈留痕、異常批次整批退回、model_status: not_run 誠實邊界。</p>
+              </div>
+              <div class="cl-light-fcard-foot cl-foot-teal">安全防護與法定查證</div>
+            </div>
+
+            <div class="cl-light-fcard">
+              <div class="cl-light-fcard-body">
+                <span class="cl-light-fcard-tag" style="color:#7c5800;">📈 價值</span>
+                <b class="cl-light-fcard-title">商業智慧與風險決策</b>
+                <p class="cl-light-fcard-desc">Power BI / SQL 資料平台直連、自動產出 Excel 盤查清冊與 Word 報告、次年度基線模擬與 SEU 節能評估。</p>
+              </div>
+              <div class="cl-light-fcard-foot cl-foot-navy">降低碳費風險與決策優化</div>
+            </div>
+          </div>
+
+          <div class="cl-light-statbar">
+            <div class="cl-light-stat">
+              <small>📈 核准總排放量</small>
+              <strong>14,223.40 <span style="font-size:12px;font-weight:700;">tCO₂e</span></strong>
+            </div>
+            <div class="cl-light-stat">
+              <small>🛡️ DQI 資料品質</small>
+              <strong style="color:#0b7a53;">78.5%</strong>
+            </div>
+            <div class="cl-light-stat">
+              <small>📋 待人工複核</small>
+              <strong>${pendCount} 筆</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="cl-light-login-card">
+          <h3>企業授權登入</h3>
+          <p class="sub">${SYSTEM_TITLE}｜請輸入企業代碼與授權憑證</p>
+          <div class="cl-light-field">
+            <label for="clCoverCompCode">公司代碼／統一編號</label>
+            <input id="clCoverCompCode" type="text" value="CL-88026190 (示範精密工業)" />
+          </div>
+          <div class="cl-light-field">
+            <label for="clCoverRole">登入職責角色 (RBAC)</label>
+            <select id="clCoverRole">
+              <option value="supervisor" selected>企業盤查主管 (Supervisor)｜完整總覽與簽核權</option>
+              <option value="reporter">現場盤查作業員 (Reporter)｜行動端拍照與填報</option>
+              <option value="admin">系統管理員 (Admin)｜係數庫與後台治理</option>
+              <option value="supplier">供應鏈專用權限 (單向)｜第一精銅材料（原物料銅供應商）</option>
+              <option value="verifier">第三方查證員 (Verifier)｜唯讀調閱操作紀錄鏈</option>
+            </select>
+          </div>
+          <div class="cl-light-field">
+            <label for="clCoverAccount">企業帳號</label>
+            <input id="clCoverAccount" type="text" value="auditor.lead@carbonlens.io" />
+          </div>
+          <div class="cl-light-field">
+            <label for="clCoverPassword">通行密碼</label>
+            <input id="clCoverPassword" type="password" value="ISO14064_2026" />
+          </div>
+          <button type="button" class="cl-light-btn-login" id="btnClCoverSubmit">
+            🔒 登入企業碳盤查工作台
+          </button>
+          <button type="button" class="cl-light-btn-demo" id="btnClCoverQuickTry">
+            🚀 免密碼直接體驗（Demo 展示／快速入口）
+          </button>
+        </div>
+      </div>
+    `;
+
+    // 若內容還是舊版深色 .cl-cover-shell，強制替換為淡色四宮格版
+    if (!overlay.querySelector('.cl-light-cover-shell')) {
+      overlay.innerHTML = lightCoverHtml;
+    }
+  }
+
+  /* -------------------------------------------------------------------------
+     5. 【PPT 第 2～4 頁修復】橫向雙軌範疇結構圖（填補左下方）＋ 右側動態雷達圖
+     ------------------------------------------------------------------------- */
+  function polarToXY(cx, cy, r, deg) {
+    const rad = ((deg - 90) * Math.PI) / 180;
+    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+  }
+
+  function buildArcPath(cx, cy, rIn, rOut, startDeg, endDeg) {
+    const sOut = polarToXY(cx, cy, rOut, endDeg);
+    const eOut = polarToXY(cx, cy, rOut, startDeg);
+    const sIn = polarToXY(cx, cy, rIn, endDeg);
+    const eIn = polarToXY(cx, cy, rIn, startDeg);
+    const largeArc = endDeg - startDeg <= 180 ? 0 : 1;
+    return [
+      'M', sOut.x.toFixed(2), sOut.y.toFixed(2),
+      'A', rOut, rOut, 0, largeArc, 0, eOut.x.toFixed(2), eOut.y.toFixed(2),
+      'L', eIn.x.toFixed(2), eIn.y.toFixed(2),
+      'A', rIn, rIn, 0, largeArc, 1, sIn.x.toFixed(2), sIn.y.toFixed(2), 'Z'
+    ].join(' ');
+  }
+
+  function buildHorizontalDualScopeHtml() {
+    const rate = (typeof S !== 'undefined' && S && S.activeElecFactorRate) ? Number(S.activeElecFactorRate) : 0.466;
+    const s1Val = 2560.2;
+    const s2Val = +(10667.6 * (rate / 0.466)).toFixed(1);
+    const s3Val = 995.6;
+    const totalVal = +(s1Val + s2Val + s3Val).toFixed(1);
+
+    const p1 = +((s1Val / totalVal) * 100).toFixed(1);
+    const p2 = +((s2Val / totalVal) * 100).toFixed(1);
+    const p3 = +(100 - p1 - p2).toFixed(1);
+
+    const innerSegs = [
+      { ring: '內圈｜ISO 14064-1', label: '類別 2 輸入能源', val: s2Val, pct: p2, color: '#00d2ff' },
+      { ring: '內圈｜ISO 14064-1', label: '類別 1 直接排放', val: s1Val, pct: p1, color: '#f5b82e' },
+      { ring: '內圈｜ISO 14064-1', label: '類別 3–6 其他間接', val: s3Val, pct: p3, color: '#a78bfa' }
+    ];
+    const outerSegs = [
+      { ring: '外圈｜GHG Protocol', label: 'Scope 2 外購電力', val: s2Val, pct: p2, color: '#1dc98e' },
+      { ring: '外圈｜GHG Protocol', label: 'Scope 1 直接排放', val: s1Val, pct: p1, color: '#f59e0b' },
+      { ring: '外圈｜GHG Protocol', label: 'Scope 3 價值鏈間接', val: s3Val, pct: p3, color: '#8b5cf6' }
+    ];
+
+    const cx = 92, cy = 92, gap = 1.8;
+    let dIn = 0;
+    const inPaths = innerSegs.map(s => {
+      const sw = (s.pct / 100) * 360;
+      const p = buildArcPath(cx, cy, 42, 58, dIn + gap / 2, dIn + sw - gap / 2);
+      dIn += sw;
+      return `<path class="cl-sunburst-arc" d="${p}" fill="${s.color}" data-ring="${s.ring}" data-label="${s.label}" data-val="${s.val.toLocaleString()} tCO₂e" data-pct="${s.pct}%"></path>`;
+    }).join('');
+
+    let dOut = 0;
+    const outPaths = outerSegs.map(s => {
+      const sw = (s.pct / 100) * 360;
+      const p = buildArcPath(cx, cy, 63, 80, dOut + gap / 2, dOut + sw - gap / 2);
+      dOut += sw;
+      return `<path class="cl-sunburst-arc" d="${p}" fill="${s.color}" data-ring="${s.ring}" data-label="${s.label}" data-val="${s.val.toLocaleString()} tCO₂e" data-pct="${s.pct}%"></path>`;
+    }).join('');
+
+    return `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(126,200,217,0.18);">
+        <div>
+          <strong style="font-size:13.5px;color:#eef7fa;">🔄 GHG Protocol × ISO 14064-1:2018 雙軌範疇結構（橫向寬版對照）</strong>
+          <div style="font-size:11px;color:#9ab8c9;">內圈：ISO 14064-1 類別 1～6 ⇄ 外圈：GHG Protocol Scope 1～3（單位：tCO₂e）</div>
+        </div>
+        <span class="badge info">SSOT 即時結構</span>
+      </div>
+      <div style="display:grid;grid-template-columns:184px minmax(0,1fr);gap:16px;align-items:center;">
+        <div style="width:184px;height:184px;margin:0 auto;">
+          <svg viewBox="0 0 184 184" width="184" height="184">
+            <circle cx="92" cy="92" r="50" fill="none" stroke="rgba(148,163,184,0.1)" stroke-width="16"></circle>
+            <circle cx="92" cy="92" r="71.5" fill="none" stroke="rgba(148,163,184,0.1)" stroke-width="17"></circle>
+            <g>${inPaths}</g><g>${outPaths}</g>
+            <circle cx="92" cy="92" r="37" fill="rgba(7,25,43,0.95)" stroke="rgba(0,210,255,0.3)"></circle>
+            <text id="clSunburstCenterTop" x="92" y="80" text-anchor="middle" fill="#9ab8c9" font-size="8.5" font-weight="700">全廠當年度合計</text>
+            <text id="clSunburstCenterVal" x="92" y="95" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="900" font-family="monospace">${totalVal.toLocaleString()} tCO₂e</text>
+            <text id="clSunburstCenterSub" x="92" y="108" text-anchor="middle" fill="#1dc98e" font-size="8" font-weight="700">內ISO｜外GHG雙軌</text>
+          </svg>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;">
+          <div style="background:rgba(0,210,255,0.08);border:1px solid rgba(0,210,255,0.3);border-top:3px solid #00d2ff;border-radius:8px;padding:10px;">
+            <div style="font-size:11px;color:#7ef4ff;font-weight:800;">⚡ 能源間接排放 (${p2}%)</div>
+            <div style="font-size:16px;font-weight:900;color:#fff;margin:4px 0;">${s2Val.toLocaleString()} <small style="font-size:10px;color:#9ab8c9;">tCO₂e</small></div>
+            <div style="font-size:11px;color:#b5d1e2;line-height:1.45;">
+              • 內圈：<b>ISO 類別 2</b> 輸入能源<br>
+              • 外圈：<b style="color:#6ee7b7;">Scope 2</b> (係數 ${rate})
+            </div>
+          </div>
+          <div style="background:rgba(245,184,46,0.08);border:1px solid rgba(245,184,46,0.3);border-top:3px solid #f5b82e;border-radius:8px;padding:10px;">
+            <div style="font-size:11px;color:#fde68a;font-weight:800;">🔥 直接溫室氣體排放 (${p1}%)</div>
+            <div style="font-size:16px;font-weight:900;color:#fff;margin:4px 0;">${s1Val.toLocaleString()} <small style="font-size:10px;color:#9ab8c9;">tCO₂e</small></div>
+            <div style="font-size:11px;color:#b5d1e2;line-height:1.45;">
+              • 內圈：<b>ISO 類別 1</b> 直接排放<br>
+              • 外圈：<b style="color:#fde68a;">Scope 1</b> 固定/移動/逸散
+            </div>
+          </div>
+          <div style="background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.3);border-top:3px solid #a78bfa;border-radius:8px;padding:10px;">
+            <div style="font-size:11px;color:#ddd6fe;font-weight:800;">🚛 其他間接排放 (${p3}%)</div>
+            <div style="font-size:16px;font-weight:900;color:#fff;margin:4px 0;">${s3Val.toLocaleString()} <small style="font-size:10px;color:#9ab8c9;">tCO₂e</small></div>
+            <div style="font-size:11px;color:#b5d1e2;line-height:1.45;">
+              • 內圈：<b>ISO 類別 3–6</b> 間接<br>
+              • 外圈：<b style="color:#ddd6fe;">Scope 3</b> 價值鏈上下游
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function buildDynamicRadarChartHtml(modeKey) {
+    const cfg = RADAR_DATASETS[modeKey] || RADAR_DATASETS.budget;
+    const axes = cfg.axes;
+    const N = axes.length;
+    const cx = 190, cy = 155, R = 105;
+
+    const ptOf = (idx, ratio) => {
+      const angle = (Math.PI * 2 * idx) / N - Math.PI / 2;
+      return {
+        x: +(cx + R * ratio * Math.cos(angle)).toFixed(1),
+        y: +(cy + R * ratio * Math.sin(angle)).toFixed(1)
+      };
+    };
+
+    const levels = [0.25, 0.5, 0.75, 1.0];
+    const gridPolys = levels.map(lv => {
+      const pts = axes.map((_, i) => {
+        const p = ptOf(i, lv);
+        return `${p.x},${p.y}`;
+      }).join(' ');
+      const labelVal = Math.round(cfg.max * lv);
+      return `<polygon points="${pts}" fill="none" stroke="rgba(148,163,184,0.25)" stroke-width="1"></polygon>` +
+             `<text x="${cx - 6}" y="${(cy - R * lv + 4).toFixed(1)}" text-anchor="end" fill="#9ab8c9" font-size="9.5">${labelVal}</text>`;
+    }).join('');
+
+    const spokesAndLabels = axes.map((ax, i) => {
+      const outer = ptOf(i, 1.0);
+      const lblPt = ptOf(i, 1.22);
+      const anchor = Math.abs(lblPt.x - cx) < 12 ? 'middle' : (lblPt.x > cx ? 'start' : 'end');
+      return `<line x1="${cx}" y1="${cy}" x2="${outer.x}" y2="${outer.y}" stroke="rgba(148,163,184,0.28)" stroke-width="1"></line>` +
+             `<text x="${lblPt.x}" y="${lblPt.y + 4}" text-anchor="${anchor}" fill="#eef7fa" font-size="11" font-weight="700">${ax.name}</text>`;
+    }).join('');
+
+    const ptsA = axes.map((ax, i) => ptOf(i, Math.min(1, ax.a / cfg.max)));
+    const polyA = ptsA.map(p => `${p.x},${p.y}`).join(' ');
+    const nodesA = ptsA.map((p, i) =>
+      `<rect class="cl-radar-vertex" x="${p.x - 4}" y="${p.y - 4}" width="8" height="8" fill="#38bdf8" stroke="#07192b" stroke-width="1.5" data-name="${axes[i].name}" data-sname="${cfg.seriesA}" data-val="${axes[i].a.toLocaleString()} ${axes[i].unit}"></rect>`
+    ).join('');
+
+    const ptsB = axes.map((ax, i) => ptOf(i, Math.min(1, ax.b / cfg.max)));
+    const polyB = ptsB.map(p => `${p.x},${p.y}`).join(' ');
+    const nodesB = ptsB.map((p, i) =>
+      `<circle class="cl-radar-vertex" cx="${p.x}" cy="${p.y}" r="4.5" fill="#0d2742" stroke="#4ade80" stroke-width="2.2" data-name="${axes[i].name}" data-sname="${cfg.seriesB}" data-val="${axes[i].b.toLocaleString()} ${axes[i].unit}"></circle>`
+    ).join('');
+
+    const defaultTipPt = ptsA[1] || { x: 250, y: 95 };
+    const defaultAx = axes[1];
+
+    return `
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+        <div style="display:flex;align-items:center;gap:14px;font-size:12px;">
+          <span style="display:inline-flex;align-items:center;gap:5px;color:#7dd3fc;font-weight:800;">
+            <span style="display:inline-block;width:12px;height:3px;background:#38bdf8;"></span>■ ${cfg.seriesA}
+          </span>
+          <span style="display:inline-flex;align-items:center;gap:5px;color:#86efac;font-weight:800;">
+            <span style="display:inline-block;width:12px;height:2px;background:#4ade80;"></span>○ ${cfg.seriesB}
+          </span>
+        </div>
+        <div class="seg" style="padding:2px;">
+          <button type="button" class="cl-radar-mode-btn" data-rmode="budget" aria-pressed="${modeKey === 'budget'}" style="font-size:11px;padding:3px 8px;">部門預算 vs. 實際</button>
+          <button type="button" class="cl-radar-mode-btn" data-rmode="seu" aria-pressed="${modeKey === 'seu'}" style="font-size:11px;padding:3px 8px;">SEU 能效雷達</button>
+        </div>
+      </div>
+
+      <div style="position:relative;width:100%;display:flex;justify-content:center;align-items:center;">
+        <svg viewBox="0 0 380 310" width="100%" height="300" style="max-width:400px;overflow:visible;" role="img" aria-label="動態儀表板多維度績效雷達圖">
+          ${gridPolys}
+          <text x="${cx - 6}" y="${cy + 4}" text-anchor="end" fill="#9ab8c9" font-size="9.5">0</text>
+          ${spokesAndLabels}
+          <polygon points="${polyA}" fill="rgba(56, 189, 248, 0.18)" stroke="#38bdf8" stroke-width="2.6"></polygon>
+          <polygon points="${polyB}" fill="rgba(74, 222, 128, 0.14)" stroke="#4ade80" stroke-width="1.8"></polygon>
+          ${nodesA}
+          ${nodesB}
+          <g id="clRadarTooltipGroup" transform="translate(${Math.min(245, defaultTipPt.x + 8)}, ${Math.max(15, defaultTipPt.y - 10)})">
+            <rect x="0" y="0" width="128" height="44" rx="5" fill="rgba(30, 41, 59, 0.92)" stroke="rgba(126, 200, 217, 0.45)"></rect>
+            <text id="clRadarTipTitle" x="8" y="17" fill="#ffffff" font-size="11.5" font-weight="800">${defaultAx.name}</text>
+            <text id="clRadarTipVal" x="8" y="34" fill="#7ef4ff" font-size="11" font-weight="800">${cfg.seriesA}: ${defaultAx.a.toLocaleString()}</text>
+          </g>
+        </svg>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px;padding-top:8px;border-top:1px solid rgba(126,200,217,0.16);font-size:11px;">
+        <div style="background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:6px;">
+          <span style="color:#9ab8c9;display:block;">SEU 節能達成率</span>
+          <strong style="color:#6ee7b7;font-size:13px;">104.2%（優於目標）</strong>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:6px;">
+          <span style="color:#9ab8c9;display:block;">年節碳潛力合計</span>
+          <strong style="color:#7ef4ff;font-size:13px;">-207.37 tCO₂e/年</strong>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:6px;">
+          <span style="color:#9ab8c9;display:block;">綜合投資回收期</span>
+          <strong style="color:#fde68a;font-size:13px;">4.35 年回本</strong>
+        </div>
+      </div>
+    `;
+  }
+
+  function enforcePpt2To4DashboardLayoutAndRadar() {
+    let trendCard = null;
+    let rightScopeCard = null;
+
+    document.querySelectorAll('article.card, .card, .dyn-card, .data-card').forEach(c => {
+      const h = c.querySelector('h3, h4, strong, .card-title');
+      if (!h) return;
+      const txt = h.textContent || '';
+      if (txt.includes('1–12 月排放趨勢') || txt.includes('1-12 月排放趨勢')) {
+        trendCard = c;
+      } else if (txt.includes('雙軌範疇結構') || txt.includes('多維度動態雷達圖')) {
+        rightScopeCard = c;
+      }
+    });
+
+    if (trendCard) {
+      let horizHost = trendCard.querySelector('#clHorizontalDualScopeMount');
+      if (!horizHost) {
+        horizHost = document.createElement('div');
+        horizHost.id = 'clHorizontalDualScopeMount';
+        horizHost.style.cssText = 'margin-top:14px;padding-top:12px;border-top:1px dashed rgba(126,200,217,0.28);';
+        trendCard.appendChild(horizHost);
+      }
+      setHtmlOnce(horizHost, buildHorizontalDualScopeHtml());
+    }
+
+    if (rightScopeCard) {
+      const headH = rightScopeCard.querySelector('h3, h4, strong, .card-title');
+      const headP = rightScopeCard.querySelector('.card-head p, p');
+      if (headH) setTextOnce(headH, '🎯 企業碳治理與重大能耗設備（SEU）多維度動態雷達圖');
+      if (headP) setTextOnce(headP, RADAR_DATASETS[currentRadarMode].title);
+
+      let radarMount = rightScopeCard.querySelector('#clDynamicRadarMount');
+      if (!radarMount) {
+        const headEl = rightScopeCard.querySelector('.card-head');
+        Array.from(rightScopeCard.children).forEach(ch => {
+          if (ch !== headEl) ch.style.display = 'none';
+        });
+        radarMount = document.createElement('div');
+        radarMount.id = 'clDynamicRadarMount';
+        rightScopeCard.appendChild(radarMount);
+      } else {
+        radarMount.style.display = 'block';
+      }
+      setHtmlOnce(radarMount, buildDynamicRadarChartHtml(currentRadarMode));
+    }
+  }
+
+  function applyPhonePreset(key) {
+    const p = THESIS_DUAL_PRESETS[key] || THESIS_DUAL_PRESETS.field;
+    const map = [
+      ['pType', p.tri], ['pLabel', p.item], ['pValue', String(p.value)],
+      ['pUnit', p.unit], ['pPeriod', p.period], ['pSite', p.site]
+    ];
+    map.forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    });
+    const note = document.getElementById('clMobileDualNote');
+    if (note) setTextOnce(note, '✓ ' + p.badge + '｜' + p.formulaNote);
+    if (typeof renderPhoneForm === 'function') renderPhoneForm();
+  }
+
+  function runMasterPatchV9065() {
+    if (isPatchRunning) return;
+    isPatchRunning = true;
+    try {
+      injectV9065Styles();
+      enforceFactorsDictionaryAndFunnel();
+      enforcePpt1LightCommercialCover();
+      enforcePpt2To4DashboardLayoutAndRadar();
+      enforcePpt6DrawerFormulaBox();
+    } catch (err) {
+      console.warn('[CarbonLens V9.06.5 Patch]', err);
+    } finally {
+      isPatchRunning = false;
+    }
+  }
+
+  document.addEventListener('click', e => {
+    const t = e.target;
+    if (!t) return;
+
+    const rBtn = t.closest('.cl-radar-mode-btn');
+    if (rBtn) {
+      e.preventDefault();
+      currentRadarMode = rBtn.getAttribute('data-rmode') || 'budget';
+      enforcePpt2To4DashboardLayoutAndRadar();
+      return;
+    }
+
+    const pBtn = t.closest('.cl-preset-btn, .cl-mobile-dual-btn');
+    if (pBtn) {
+      e.preventDefault();
+      applyPhonePreset(pBtn.getAttribute('data-preset'));
+      return;
+    }
+
+    if (t.id === 'btnClCoverSubmit' || t.id === 'btnClCoverQuickTry') {
+      e.preventDefault();
+      const roleSel = document.getElementById('clCoverRole');
+      const role = (t.id === 'btnClCoverSubmit' && roleSel) ? roleSel.value : 'supervisor';
+      if (typeof UI !== 'undefined' && UI) {
+        UI.role = role;
+        UI.user = role === 'reporter' ? 'zhiming.chen' : 'yijun.lin';
+        UI.mode = 'front';
+        if (typeof saveUI === 'function') { try { saveUI(); } catch (err) {} }
+      }
+      const ov = document.getElementById('clCommercialCoverOverlay');
+      if (ov) ov.classList.remove('active');
+      if (typeof renderAll === 'function') renderAll(false);
+      return;
+    }
+
+    setTimeout(runMasterPatchV9065, 30);
+  });
+
+  document.addEventListener('mouseover', e => {
+    const vtx = e.target && e.target.closest ? e.target.closest('.cl-radar-vertex') : null;
+    if (vtx) {
+      const g = document.getElementById('clRadarTooltipGroup');
+      const tTitle = document.getElementById('clRadarTipTitle');
+      const tVal = document.getElementById('clRadarTipVal');
+      const x = parseFloat(vtx.getAttribute('cx') || vtx.getAttribute('x')) || 190;
+      const y = parseFloat(vtx.getAttribute('cy') || vtx.getAttribute('y')) || 155;
+      if (g) g.setAttribute('transform', `translate(${Math.min(245, Math.max(10, x + 10))}, ${Math.max(10, y - 22)})`);
+      if (tTitle) tTitle.textContent = vtx.getAttribute('data-name') || '';
+      if (tVal) tVal.textContent = (vtx.getAttribute('data-sname') || '') + ': ' + (vtx.getAttribute('data-val') || '');
+    }
+  });
+
+  if (typeof subs !== 'undefined' && subs && typeof subs.add === 'function') {
+    subs.add(() => setTimeout(runMasterPatchV9065, 25));
+  }
+  window.addEventListener('hashchange', () => setTimeout(runMasterPatchV9065, 25));
+  window.addEventListener('DOMContentLoaded', runMasterPatchV9065);
+
+  runMasterPatchV9065();
+  setTimeout(runMasterPatchV9065, 200);
+})();
+/* =========================================================================
+   * 官方入口優先啟動守門員 (Official Commercial Portal Gateway)
+   * - 規範：無論任何網址、#/mobile 路由或 QR Code 掃碼，第一眼一律先展示淡色官方入口
+   * - 機制：記憶目標路徑，點擊「登入」或「免密碼體驗」後無縫直達對應工作台
+   * ========================================================================= */
+  (function enforceOfficialPortalFirst() {
+    const hash = window.location.hash || '';
+    const search = window.location.search || '';
+    const params = new URLSearchParams(search);
+    const qrScenario = params.get('sc') || '';
+    const qrRole = params.get('role') || '';
+
+    let pendingTargetMode = 'front';
+    let pendingTargetScreen = 'command';
+    let defaultRole = 'supervisor';
+
+    if (hash.includes('mobile') || qrScenario === 'mobile_scan') {
+      pendingTargetMode = 'mobile';
+      pendingTargetScreen = hash.includes('scan') ? 'scan' : 'home';
+      defaultRole = 'reporter';
+    } else if (hash.includes('dual') || qrScenario === 'thesis_tour') {
+      pendingTargetMode = 'dual';
+      pendingTargetScreen = 'front';
+      defaultRole = 'supervisor';
+    } else if (hash.includes('admin')) {
+      pendingTargetMode = 'admin';
+      pendingTargetScreen = 'overview';
+      defaultRole = 'admin';
+    }
+
+    if (qrRole && ['supervisor', 'reporter', 'admin', 'verifier'].includes(qrRole)) {
+      defaultRole = qrRole;
+    }
+
+    function showPortalCover() {
+      const overlay = document.getElementById('clCommercialCoverOverlay');
+      if (overlay) {
+        overlay.classList.add('active');
+
+        const roleSel = document.getElementById('clCoverRole');
+        if (roleSel && roleSel.value !== defaultRole) {
+          roleSel.value = defaultRole;
+        }
+
+        const subP = overlay.querySelector('.cl-light-login-card .sub');
+        if (subP && (pendingTargetMode === 'mobile' || qrScenario === 'mobile_scan')) {
+          subP.innerHTML = 'CarbonLens 企業碳盤查系統｜<span style="color:#007791;font-weight:bold;">已偵測到現場行動端作業連動</span>';
+        }
+      }
+    }
+
+    document.addEventListener('click', function (e) {
+      const btn = e.target.closest('#btnClCoverSubmit, #btnClCoverQuickTry');
+      if (!btn) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      const overlay = document.getElementById('clCommercialCoverOverlay');
+      const roleSel = document.getElementById('clCoverRole');
+      const selectedRole = (btn.id === 'btnClCoverSubmit' && roleSel) ? roleSel.value : defaultRole;
+
+      if (typeof UI !== 'undefined' && UI) {
+        UI.role = selectedRole;
+        UI.user = selectedRole === 'reporter' ? 'zhiming.chen' : (selectedRole === 'admin' ? 'sysadmin' : 'yijun.lin');
+        UI.mode = pendingTargetMode;
+        if (pendingTargetMode === 'mobile') {
+          UI.phone = pendingTargetScreen;
+        }
+        if (typeof saveUI === 'function') {
+          try { saveUI(); } catch (err) {}
+        }
+      }
+
+      if (overlay) overlay.classList.remove('active');
+
+      if (typeof go === 'function') {
+        go(pendingTargetMode, pendingTargetScreen);
+      } else if (typeof renderAll === 'function') {
+        renderAll(false);
+      }
+
+      if (typeof toast === 'function') {
+        toast('企業授權成功', '已自官方入口切換至對應工作台。', 'ok');
+      }
+    }, true);
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', showPortalCover);
+    } else {
+      setTimeout(showPortalCover, 50);
+    }
+  })();
 }());
 </script>
 
